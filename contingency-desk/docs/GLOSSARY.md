@@ -15,9 +15,17 @@ Arming writes `governance.armed_by`, `armed_at`, `armed_trigger_level` and `arme
 then registers `(variable, operator, level)` with the watcher. The value of the record is the
 timestamp: the decision is made while the market is calm and provably before the event.
 
-**Armed signature.** `sha256(json.dumps(plan_body, sort_keys=True))` with the `governance` key
-removed. Proves the body she approved was not quietly rewritten afterwards. This is the artefact
-a post-hoc AI explanation cannot produce.
+**Armed signature.** `sha256(json.dumps(plan_body, sort_keys=True))` with the `governance` **and
+`state`** keys removed - both of those change legitimately as the plan moves through its lifecycle,
+the reasoning does not. `store.verify_signature(plan)` recomputes it and compares; the fired card
+shows the result. Proves the body she approved was not quietly rewritten afterwards. This is the
+artefact a post-hoc AI explanation cannot produce.
+
+**Pre-armed plan.** PLAN-003 ships in `WATCHING`, armed by Priscilla at 2026-08-24 08:52 - twelve
+days before the dial moves. PLAN-001 ships `DRAFTED` and is armed live. The pair is deliberate: the
+live one shows what arming *is*, the seeded one shows what the arming record is *worth*, because its
+timestamp and signature were written before the market moved. `store.arm(..., at=)` backdates only
+in the offline authoring pass; the UI never passes it.
 
 **Armed trigger level.** The level the *human* signed, which may differ from the level the agent
 drafted. `trigger.level` keeps the drafted value; the watcher uses `governance.armed_trigger_level`.
@@ -188,7 +196,8 @@ client script, suitability, assumptions, confidence, state-dependent action bar.
 - **78.85** — where the CF-0005 trigger actually solves.
 - **79.00** — the level armed, rounded down for margin. **At 79.00 nothing fires. That is correct.**
 - **72.40** — the demo dial setting. Brent on 2026-02-27, the day before the conflict; a real row
-  in `market_context.csv`. Gives LTV 73.86%, cure SGD 418,143, Hartono -8.73%, Abdullah -4.91%.
+  in `market_context.csv`. Gives LTV 73.86%, cure SGD 418,143, Hartono -8.34%, Abdullah -4.27%,
+  and CL-0002 **+0.65%** - the tech client gains when oil falls.
 - **101.50** — Brent today (2026-08-26).
 - **41.42%** — Bara as a share of Hartono's household wealth, in a custody account.
 - **6.18%** — SYN-SP-0505 as a share of PF-0001, and 100% of its structured-products bucket.

@@ -4,7 +4,7 @@
 Nothing here runs at demo time - this is the frozen output of J0's overnight authoring pass.
 Re-run after verify.py if the underlying data ever changes.
 """
-import json, os, hashlib, datetime
+import json, os, sys, hashlib, datetime
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 F = json.load(open(f"{HERE}/../out/facts.json"))
@@ -13,18 +13,47 @@ CF5 = F["facilities"]["CF-0005"]
 H1 = F["clients"]["CL-0001"]; H19 = F["clients"]["CL-0019"]
 BETA = {k: v["beta"] for k, v in F["betas"].items()}
 AUTHORED = "2026-08-24T03:12:00+08:00"      # the overnight run, two days before today
-ARMED_AT = "2026-08-24T08:52:00+08:00"
+ARMED_AT = "2026-08-24T08:52:00+08:00"      # Priscilla at her desk the same morning
+RM = "priscilla.ong@juliusbaer.com"
+
+# The event that put Brent where it is. event_log.csv is the authoritative record for anything that
+# happened in 2026; the trigger is the REVERSAL of a logged event, not a forecast of a new one.
+CLOSURE = "2026-03-04"
 
 def brent_for_ltv(ltv_pct):
     lv = CF5["drawn"] / (ltv_pct / 100)
     return B0 * (1 + (lv - CF5["lending_value"]) / CF5["C"])
 
+# Advance rates come from holdings.advance_rate_pct, never from a literal. A cure posted in one
+# instrument needs a different amount of market value than the same cure posted in another, and the
+# advance rate is the whole of that difference.
+AR = {l["instrument_id"]: l["advance_rate"] for l in CF5["legs"]}          # CF-0005 collateral pool
+AR.update({p["instrument_id"]: p["advance_rate_pct"] for p in F["positions"]
+           if p["client_id"] == "CL-0001"})                                # everything Hartono holds
+BARA_AR = AR["SYN-ST-0101"]
+TOPUP_ID = "SYN-FI-0208"                  # the daily-liquid PF-0001 line proposed as the cure source
+TOPUP = next(p for p in F["positions"] if p["instrument_id"] == TOPUP_ID
+             and p["portfolio_id"] == "PF-0001")
+TOPUP_AR = TOPUP["advance_rate_pct"]
+
 def at_brent(B):
+    """`lv_gap` is the shortfall in LENDING value. Market value needed depends on the advance rate."""
     m = B / B0 - 1
     lv = CF5["lending_value"] + CF5["C"] * m
+    gap = CF5["drawn"] / 0.70 - lv
     return {"mult": m, "lending_value": lv, "ltv": 100 * CF5["drawn"] / lv,
             "cure_cash": CF5["drawn"] - 0.70 * lv,
-            "topup_bara_mv": (CF5["drawn"] / 0.70 - lv) / 0.50}
+            "lv_gap": gap,
+            "topup_bara_mv": gap / (BARA_AR / 100),
+            "topup_fi_mv": gap / (TOPUP_AR / 100)}
+
+_PF1 = [p for p in F["positions"] if p["portfolio_id"] == "PF-0001"]
+PF1_TOT = sum(p["market_value_base"] for p in _PF1)
+PF1_FI = sum(p["market_value_base"] for p in _PF1 if p["asset_class"] == "Fixed Income")
+
+def fi_weight_after(sold):
+    """PF-0001 fixed income weight if `sold` of it is liquidated to cure the facility."""
+    return 100 * (PF1_FI - sold) / (PF1_TOT - sold)
 
 BARA = next(t for t in H1["top"] if t["instrument_id"] == "SYN-ST-0101")
 TRIG = 79.00                      # armed level, rounded down from the derived 78.85
@@ -65,18 +94,20 @@ plan1 = {
       {"step": "Reference: Brent before the conflict, 2026-02-27", "value": f"USD {PRECONFLICT:.2f}", "source": "market_context.BRENT_USD_BBL"},
     ]},
   "evidence_chain": [
-    {"hop":1,"kind":"source_of_wealth","ref":"CL-0001","label":"Inherited - family coal mining and energy group",
+    {"kind":"source_of_wealth","ref":"CL-0001","label":"Inherited - family coal mining and energy group",
      "detail":"Wealth outside the bank is the same factor as the wealth inside it.","provenance":"clients.source_of_wealth","source_file":"clients.csv","confidence":"high"},
-    {"hop":2,"kind":"direct","ref":"SYN-ST-0101","label":f"Bara Nusantara Energy Tbk - USD {BARA['usd']:,.0f} = {BARA['pct_household']:.2f}% of household wealth",
+    {"kind":"direct","ref":"SYN-ST-0101","label":f"Bara Nusantara Energy Tbk - USD {BARA['usd']:,.0f} = {BARA['pct_household']:.2f}% of household wealth",
      "detail":"Held in PF-0002, a CUSTODY account. Mandate bands do not measure custody accounts, so this concentration appears on no mandate report.","provenance":"holdings.instrument_id + portfolios.service_model","source_file":"holdings.csv","confidence":"high"},
-    {"hop":3,"kind":"structured_underlying","ref":"SYN-SP-0505","label":"Worst-of leg 3 of 3 in the Fixed Coupon Note held in PF-0001",
+    {"kind":"structured_underlying","ref":"SYN-SP-0505","label":"Worst-of leg 3 of 3 in the Fixed Coupon Note held in PF-0001",
      "detail":"USD 1,662,484 = 6.18% of PF-0001, and 100% of its Structured Products allocation. The other two legs, Pacific Orient Shipping and Global Energy Majors, are the same trade. A three-name basket that is one factor.","provenance":"instruments.underlying_reference","source_file":"instruments.csv","confidence":"high"},
-    {"hop":4,"kind":"collateral","ref":"CF-0005","label":f"SGD {CF5['drawn']:,.0f} Lombard secured on PF-0002, margin call at {CF5['trigger_ltv']:.0f}%",
+    {"kind":"collateral","ref":"CF-0005","label":f"SGD {CF5['drawn']:,.0f} Lombard secured on PF-0002, margin call at {CF5['trigger_ltv']:.0f}%",
      "detail":f"LTV {CF5['ltv_now']:.2f}% today. It was 78.50% at 2025-12-31 - already through the trigger - and was cured by the energy rally, not by a decision.","provenance":"credit_facilities.collateral_portfolio_id","source_file":"credit_facilities.csv","confidence":"high"},
-    {"hop":5,"kind":"cash_need","ref":"CN-001","label":"SGD 9,000,000 Singapore property deposit, 2027-03-01 to 2027-06-30, Likely",
+    {"kind":"cash_need","ref":"CN-001","label":"SGD 9,000,000 Singapore property deposit, 2027-03-01 to 2027-06-30, Likely",
      "detail":"Corroborated by the RM note of 2026-04-14. Any cure funded from PF-0001 competes with this.","provenance":"planned_cash_needs","source_file":"planned_cash_needs.csv","confidence":"high"},
-    {"hop":6,"kind":"factor","ref":"BRENT","label":f"Bara beta {BETA['SYN-ST-0101']:.3f} to Brent",
+    {"kind":"rm_note","ref":"N-002","label":"2026-04-14 - he asked what gives him more energy exposure; he subscribed the next day","detail":"The concentration is not drift. The bank sold him more of the factor he was already long, four months ago, and recorded the conversation that did it.","provenance":"rm_notes.json note_id N-002","source_file":"rm_notes.json","confidence":"high"},
+    {"kind":"factor","ref":"BRENT","label":f"Bara beta {BETA['SYN-ST-0101']:.3f} to Brent",
      "detail":f"OLS through origin, 4 snapshot returns, R2 {F['betas']['SYN-ST-0101']['r2']:.2f}.","provenance":"estimated from instruments price history","source_file":"instruments.csv","confidence":"medium"},
+    {"kind":"event","ref":CLOSURE,"label":"2026-03-04 - Strait of Hormuz effectively closed; Brent surges past USD 120","detail":"Brent is at 101.50 because of a logged event. The trigger is that event reversing, not a new one being forecast - which is why the level can be derived instead of predicted.","provenance":"event_log.csv event_date - the authoritative record for 2026","source_file":"event_log.csv","confidence":"high"},
   ],
   "projected_consequence": {
     "summary": (f"At Brent {TRIG:.0f}, Bara falls {100*bara_move_79:.1f}% and CF-0005 reaches "
@@ -90,13 +121,14 @@ plan1 = {
       {"label":"Lending value","value":f"SGD {CF5['lending_value']:,.0f} -> SGD {S['lending_value']:,.0f}","basis":"holdings.lending_value_base x beta shock"},
       {"label":"Bara direct position","value":f"{100*bara_move_79:.2f}% = USD {BARA['usd']*bara_move_79:,.0f}","basis":"beta x Brent move"},
       {"label":"Household impact","value":f"USD {F['scenario_brent_79']['clients']['CL-0001']['usd_delta']:,.0f} ({100*F['scenario_brent_79']['clients']['CL-0001']['usd_delta']/H1['household_usd']:.2f}% of wealth)","basis":"all positions revalued at their own Brent beta"},
-      {"label":"At the pre-conflict Brent level (72.40)","value":f"LTV {P['ltv']:.2f}%, cure requires SGD {P['cure_cash']:,.0f} cash or SGD {P['topup_bara_mv']:,.0f} of additional collateral","basis":"same engine, dial set to the 2026-02-27 observation"},
+      {"label":f"At the pre-conflict Brent level ({PRECONFLICT:.2f})","value":f"LTV {P['ltv']:.2f}%, cure = SGD {P['cure_cash']:,.0f} cash, or SGD {P['lv_gap']:,.0f} of additional lending value","basis":"same engine, dial set to the 2026-02-27 observation"},
+      {"label":"What that cure costs in market value","value":f"SGD {P['topup_bara_mv']:,.0f} of Bara at its {BARA_AR:.0f}% advance rate, or SGD {P['topup_fi_mv']:,.0f} of {TOPUP_ID} at {TOPUP_AR:.0f}%","basis":"holdings.advance_rate_pct - the advance rate, not the shortfall, decides how much stock a cure costs"},
     ]},
   "actions": [
-    {"rank":1,"action":"Pre-agree a cure path now: earmark SGD 1.2m of PF-0001 short-duration fixed income (SYN-FI-0208) as the collateral top-up, documented before the trigger.",
+    {"rank":1,"action":f"Pre-agree a cure path now: earmark SGD {P['topup_fi_mv']:,.0f} of PF-0001 short-duration fixed income ({TOPUP_ID}, {TOPUP_AR:.0f}% advance rate) as the collateral top-up, documented before the trigger.",
      "rationale":"The cure is small if it is prepared and expensive if it is improvised. Deciding the source of funds while the client is calm is the entire point of arming a plan.",
-     "second_order":"Reduces PF-0001's fixed income from 25.17% toward the 15% band floor if drawn in full. Still in band, but it consumes the same liquidity CN-001 needs in March 2027.",
-     "reversible":True,"requires":["Client acknowledgement","Credit desk note on CF-0005"]},
+     "second_order":f"The holding is SGD {TOPUP['market_value_base']:,.0f} and daily-liquid, so the earmark is covered. Pledging it does not move the mandate; liquidating it to cure takes PF-0001 fixed income from {100*PF1_FI/PF1_TOT:.2f}% to {fi_weight_after(P['topup_fi_mv']):.2f}%, still inside the 15-40% band. Either way it is the same liquidity CN-001 needs in March 2027.",
+     "reversible":True,"requires":["Client acknowledgement","Credit desk note on CF-0005","Extension of the CF-0005 collateral pool from PF-0002 to PF-0001"]},
     {"rank":2,"action":"Reduce the FCN (SYN-SP-0505) position in PF-0001 at or before the next coupon.",
      "rationale":"It is the only holding that is simultaneously inside the mandate and referencing the collateral. Selling it lowers correlated exposure without touching the shareholding he will not discuss.",
      "second_order":"Forfeits the 9.20% coupon and crystallises against a note bought in April. He subscribed to it four months ago on his own view; expect resistance.",
@@ -167,9 +199,9 @@ plan2 = {
       {"step":"CN-001 window opens","value":"2027-03-01","source":"planned_cash_needs"},
     ]},
   "evidence_chain":[
-    {"hop":1,"kind":"collateral","ref":"CF-0005","label":f"SGD {CF5['drawn']:,.0f} drawn, LTV {CF5['ltv_now']:.2f}%","detail":"Secured on PF-0002, which is 98% Bara.","provenance":"credit_facilities","source_file":"credit_facilities.csv","confidence":"high"},
-    {"hop":2,"kind":"cash_need","ref":"CN-001","label":"SGD 9,000,000 property deposit, 2027-03-01 to 2027-06-30","detail":"Certainty: Likely. RM note 2026-04-14 confirms a Bukit Timah property, around SGD 9m.","provenance":"planned_cash_needs","source_file":"planned_cash_needs.csv","confidence":"high"},
-    {"hop":3,"kind":"direct","ref":"PF-0001","label":"The only realistic source of both the deposit and any collateral cure","detail":"PF-0002 cannot fund either without selling the shareholding he has refused to reduce.","provenance":"holdings + portfolios.service_model","source_file":"holdings.csv","confidence":"high"},
+    {"kind":"collateral","ref":"CF-0005","label":f"SGD {CF5['drawn']:,.0f} drawn, LTV {CF5['ltv_now']:.2f}%","detail":"Secured on PF-0002, which is 98% Bara.","provenance":"credit_facilities","source_file":"credit_facilities.csv","confidence":"high"},
+    {"kind":"cash_need","ref":"CN-001","label":"SGD 9,000,000 property deposit, 2027-03-01 to 2027-06-30","detail":"Certainty: Likely. RM note 2026-04-14 confirms a Bukit Timah property, around SGD 9m.","provenance":"planned_cash_needs","source_file":"planned_cash_needs.csv","confidence":"high"},
+    {"kind":"direct","ref":"PF-0001","label":"The only realistic source of both the deposit and any collateral cure","detail":"PF-0002 cannot fund either without selling the shareholding he has refused to reduce.","provenance":"holdings + portfolios.service_model","source_file":"holdings.csv","confidence":"high"},
   ],
   "projected_consequence":{
     "summary":(f"If the facility reaches {LTV_WARN:.0f}% LTV, the cure and the SGD 9m deposit draw on the same "
@@ -229,12 +261,14 @@ plan3 = {
       {"step":"Identified block","value":f"USD {blk['usd']:,.0f} = {blk['pct']:.2f}% of household wealth","source":"holdings, 4 instruments"},
     ]},
   "evidence_chain":[
-    {"hop":1,"kind":"source_of_wealth","ref":"CL-0019","label":"Entrepreneur - Gulf logistics, port services and marine chartering","detail":"Charter rates are elevated because the Strait is closed. The operating business is long the same event as the portfolio.","provenance":"clients.source_of_wealth","source_file":"clients.csv","confidence":"high"},
-    {"hop":2,"kind":"direct","ref":"SYN-ST-0104","label":f"Pacific Orient Shipping Ltd - {[t for t in H19['top'] if t['instrument_id']=='SYN-ST-0104'][0]['pct_household']:.2f}% of household","detail":"Also a worst-of leg of the note below.","provenance":"holdings.instrument_id","source_file":"holdings.csv","confidence":"high"},
-    {"hop":3,"kind":"fund_sector","ref":"SYN-EQ-0008","label":f"Global Energy Majors Equity Fund - {[t for t in H19['top'] if t['instrument_id']=='SYN-EQ-0008'][0]['pct_household']:.2f}% of household","detail":"Also a worst-of leg of the note below.","provenance":"instruments.sector (product control mapping)","source_file":"instruments.csv","confidence":"high"},
-    {"hop":4,"kind":"structured_underlying","ref":"SYN-SP-0505","label":"FCN worst-of: Pacific Orient Shipping / Global Energy Majors / Bara Nusantara","detail":"Two of the three legs are positions he already holds outright. The note doubles them rather than diversifying.","provenance":"instruments.underlying_reference","source_file":"instruments.csv","confidence":"high"},
-    {"hop":5,"kind":"factor","ref":"BRENT","label":"All four exposures load on one factor","detail":f"Betas: POS {BETA['SYN-ST-0104']:.2f}, GEM {BETA['SYN-EQ-0008']:.2f}, APAC Shipping {BETA['SYN-EQ-0025']:.2f}, FCN {BETA['SYN-SP-0505']:.2f}.","provenance":"estimated from instruments price history","source_file":"instruments.csv","confidence":"medium"},
-    {"hop":6,"kind":"cash_need","ref":"CN-017","label":"USD 5,000,000 Singapore family office seed capital, 2027","detail":"Funded from the same portfolio.","provenance":"planned_cash_needs","source_file":"planned_cash_needs.csv","confidence":"high"},
+    {"kind":"rm_note","ref":"N-026","label":"2026-08-12 - he asked what happens to his portfolio if the Strait reopens. Priscilla wrote: 'We have not modelled this.'","detail":"This plan is that answer. The client asked for it twelve days before it was authored.","provenance":"rm_notes.json note_id N-026","source_file":"rm_notes.json","confidence":"high"},
+    {"kind":"source_of_wealth","ref":"CL-0019","label":"Entrepreneur - Gulf logistics, port services and marine chartering","detail":"Charter rates are elevated because the Strait is closed. The operating business is long the same event as the portfolio.","provenance":"clients.source_of_wealth","source_file":"clients.csv","confidence":"high"},
+    {"kind":"direct","ref":"SYN-ST-0104","label":f"Pacific Orient Shipping Ltd - {[t for t in H19['top'] if t['instrument_id']=='SYN-ST-0104'][0]['pct_household']:.2f}% of household","detail":"Also a worst-of leg of the note below.","provenance":"holdings.instrument_id","source_file":"holdings.csv","confidence":"high"},
+    {"kind":"fund_sector","ref":"SYN-EQ-0008","label":f"Global Energy Majors Equity Fund - {[t for t in H19['top'] if t['instrument_id']=='SYN-EQ-0008'][0]['pct_household']:.2f}% of household","detail":"Also a worst-of leg of the note below.","provenance":"instruments.sector (product control mapping)","source_file":"instruments.csv","confidence":"high"},
+    {"kind":"structured_underlying","ref":"SYN-SP-0505","label":"FCN worst-of: Pacific Orient Shipping / Global Energy Majors / Bara Nusantara","detail":"Two of the three legs are positions he already holds outright. The note doubles them rather than diversifying.","provenance":"instruments.underlying_reference","source_file":"instruments.csv","confidence":"high"},
+    {"kind":"factor","ref":"BRENT","label":"All four exposures load on one factor","detail":f"Betas: POS {BETA['SYN-ST-0104']:.2f}, GEM {BETA['SYN-EQ-0008']:.2f}, APAC Shipping {BETA['SYN-EQ-0025']:.2f}, FCN {BETA['SYN-SP-0505']:.2f}.","provenance":"estimated from instruments price history","source_file":"instruments.csv","confidence":"medium"},
+    {"kind":"cash_need","ref":"CN-017","label":"USD 5,000,000 Singapore family office seed capital, 2027","detail":"Funded from the same portfolio.","provenance":"planned_cash_needs","source_file":"planned_cash_needs.csv","confidence":"high"},
+    {"kind":"event","ref":CLOSURE,"label":"2026-03-04 - Strait of Hormuz effectively closed; Brent surges past USD 120","detail":"The same logged event is long his portfolio and long his operating business. Both sides of his balance sheet are one trade on one event.","provenance":"event_log.csv event_date - the authoritative record for 2026","source_file":"event_log.csv","confidence":"high"},
   ],
   "projected_consequence":{
     "summary":(f"At Brent {TRIG:.0f} the identified block falls about USD {abs(d19['usd_delta']):,.0f} "
@@ -288,6 +322,21 @@ plan3 = {
     "fired_at":None,"fired_observation":None,"resolution":None,"resolution_reason":None,
     "decision_log":[{"at":AUTHORED,"actor":"contingency-desk-authoring-agent","from":None,"to":"DRAFTED","note":"Same scenario walk as PLAN-001; shared instrument SYN-SP-0505"}]},
 }
+
+# Hop numbers are derived from position, never hand-maintained. This has to happen BEFORE arming:
+# the signature covers the whole body, so anything that touches it afterwards invalidates the record.
+# (It did, the first time. The check caught it, which is the point of having one.)
+for p in (plan1, plan2, plan3):
+    for i, hop in enumerate(p["evidence_chain"], 1):
+        hop["hop"] = i
+
+# PLAN-003 ships already armed. PLAN-001 stays DRAFTED so the RM arms it live: one card proves the
+# mechanism, the other proves the artefact - a signature written twelve days before the market moved.
+sys.path.insert(0, os.path.dirname(HERE))
+import store
+plan3 = store.arm(plan3, RM, at=ARMED_AT,
+                  note="Reviewed the overnight walk; armed unchanged at the drafted level")
+assert store.verify_signature(plan3)["ok"], "the seeded arming record must verify as written"
 
 for p in (plan1, plan2, plan3):
     with open(f"{HERE}/{p['plan_id']}.json", "w") as fh:

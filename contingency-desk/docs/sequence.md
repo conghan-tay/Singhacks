@@ -62,7 +62,7 @@ sequenceDiagram
     U->>E: shock vector over risk factors
     E->>E: revalue every position at its own beta
     E->>E: recompute lending value, LTV per facility
-    E-->>U: CL-0001 -8.73%, CF-0005 LTV 73.86% BREACH<br/>CL-0019 -4.91%<br/>CL-0002 +1.4% - tech gains
+    E-->>U: CL-0001 -8.34%, CF-0005 LTV 73.86% BREACH<br/>CL-0019 -4.27%<br/>CL-0002 +0.65% - tech gains
     E->>S: evaluate all WATCHING triggers
     S-->>U: PLAN-001 FIRED, PLAN-003 FIRED
     U-->>P: two clients, one instrument,<br/>opposite stated intentions

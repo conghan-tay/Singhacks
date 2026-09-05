@@ -53,34 +53,34 @@
   },
   "evidence_chain": [
     {
-      "hop": 1,
       "kind": "collateral",
       "ref": "CF-0005",
       "label": "SGD 8,000,000 drawn, LTV 59.15%",
       "detail": "Secured on PF-0002, which is 98% Bara.",
       "provenance": "credit_facilities",
       "source_file": "credit_facilities.csv",
-      "confidence": "high"
+      "confidence": "high",
+      "hop": 1
     },
     {
-      "hop": 2,
       "kind": "cash_need",
       "ref": "CN-001",
       "label": "SGD 9,000,000 property deposit, 2027-03-01 to 2027-06-30",
       "detail": "Certainty: Likely. RM note 2026-04-14 confirms a Bukit Timah property, around SGD 9m.",
       "provenance": "planned_cash_needs",
       "source_file": "planned_cash_needs.csv",
-      "confidence": "high"
+      "confidence": "high",
+      "hop": 2
     },
     {
-      "hop": 3,
       "kind": "direct",
       "ref": "PF-0001",
       "label": "The only realistic source of both the deposit and any collateral cure",
       "detail": "PF-0002 cannot fund either without selling the shareholding he has refused to reduce.",
       "provenance": "holdings + portfolios.service_model",
       "source_file": "holdings.csv",
-      "confidence": "high"
+      "confidence": "high",
+      "hop": 3
     }
   ],
   "projected_consequence": {

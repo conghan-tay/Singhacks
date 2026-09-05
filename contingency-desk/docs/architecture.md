@@ -10,7 +10,7 @@ Single Streamlit process. No network calls on the demo path, so nothing can fail
 ```mermaid
 flowchart TB
     subgraph offline["Offline - runs before the demo, never during"]
-        CSV[("Challenge data<br/>12 CSV + rm_notes.json")]
+        CSV[("Challenge data<br/>11 CSV + rm_notes.json<br/>event_log.csv is authoritative for 2026")]
         VER["verify.py<br/>deterministic recompute"]
         SEED["seed/build_seed.py<br/>12 risk factors, 21 exposure edges"]
         AUTH["Authoring agent<br/>LLM, human-edited"]
@@ -101,6 +101,12 @@ flowchart TB
 | Mandate band and concentration checks | Detecting where `rm_notes` contradict computed state |
 | Liquidity coverage vs planned cash needs | Critiquing an action against mandate, profile and objectives |
 
+Two of those rows are worth naming. Every evidence hop carries a `source_file`, and a test asserts
+each reference actually resolves in it - a cited note id exists in `rm_notes.json`, a cited event
+date exists in `event_log.csv`. And the trigger is the reversal of a **logged** event (2026-03-04,
+the Hormuz closure) rather than a forecast of a new one, which is why its level can be derived from
+the facility arithmetic instead of predicted. The model never supplies an event; it reads one.
+
 > **A trigger is never evaluated by a model.**
 > It is a schema constant: `trigger.evaluated_by == "deterministic"`. A plan claiming otherwise
 > fails validation.
@@ -119,6 +125,6 @@ never an execution.
 so what the RM approved cannot be silently rewritten, and the approval provably predates the
 outcome. That is the artefact a post-hoc explanation can never produce.
 
-**Scale.** 20 clients, 24 portfolios, 1,015 position rows. Exposure aggregation is a group-by; a
+**Scale.** 20 clients, 24 portfolios, 1,015 holding rows across five snapshots (206 at 2026-08-26). Exposure aggregation is a group-by; a
 scenario is a vector multiply. The engine is milliseconds. The overnight scenario walk is
 embarrassingly parallel by client.

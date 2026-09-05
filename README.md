@@ -25,7 +25,7 @@ moved, so no post-hoc rationalisation is available to it.
 cd contingency-desk
 pip3 install --break-system-packages pytest jsonschema pandas
 python3 verify.py --write          # recompute every number from the dataset
-python3 -m pytest tests/ -q        # 37 assertions
+python3 -m pytest tests/ -q        # 40 assertions
 python3 engine.py                  # the book at three Brent levels
 python3 store.py                   # a full DRAFTED -> ACTIONED walk with its decision log
 ```

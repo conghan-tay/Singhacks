@@ -7,7 +7,7 @@
   ],
   "title": "Strait reopens: the Asia portfolio and the Gulf business fall together",
   "severity": "high",
-  "state": "DRAFTED",
+  "state": "WATCHING",
   "authored": {
     "by": "contingency-desk-authoring-agent",
     "at": "2026-08-24T03:12:00+08:00",
@@ -42,64 +42,84 @@
   },
   "evidence_chain": [
     {
-      "hop": 1,
+      "kind": "rm_note",
+      "ref": "N-026",
+      "label": "2026-08-12 - he asked what happens to his portfolio if the Strait reopens. Priscilla wrote: 'We have not modelled this.'",
+      "detail": "This plan is that answer. The client asked for it twelve days before it was authored.",
+      "provenance": "rm_notes.json note_id N-026",
+      "source_file": "rm_notes.json",
+      "confidence": "high",
+      "hop": 1
+    },
+    {
       "kind": "source_of_wealth",
       "ref": "CL-0019",
       "label": "Entrepreneur - Gulf logistics, port services and marine chartering",
       "detail": "Charter rates are elevated because the Strait is closed. The operating business is long the same event as the portfolio.",
       "provenance": "clients.source_of_wealth",
       "source_file": "clients.csv",
-      "confidence": "high"
+      "confidence": "high",
+      "hop": 2
     },
     {
-      "hop": 2,
       "kind": "direct",
       "ref": "SYN-ST-0104",
       "label": "Pacific Orient Shipping Ltd - 11.41% of household",
       "detail": "Also a worst-of leg of the note below.",
       "provenance": "holdings.instrument_id",
       "source_file": "holdings.csv",
-      "confidence": "high"
+      "confidence": "high",
+      "hop": 3
     },
     {
-      "hop": 3,
       "kind": "fund_sector",
       "ref": "SYN-EQ-0008",
       "label": "Global Energy Majors Equity Fund - 8.94% of household",
       "detail": "Also a worst-of leg of the note below.",
       "provenance": "instruments.sector (product control mapping)",
       "source_file": "instruments.csv",
-      "confidence": "high"
+      "confidence": "high",
+      "hop": 4
     },
     {
-      "hop": 4,
       "kind": "structured_underlying",
       "ref": "SYN-SP-0505",
       "label": "FCN worst-of: Pacific Orient Shipping / Global Energy Majors / Bara Nusantara",
       "detail": "Two of the three legs are positions he already holds outright. The note doubles them rather than diversifying.",
       "provenance": "instruments.underlying_reference",
       "source_file": "instruments.csv",
-      "confidence": "high"
+      "confidence": "high",
+      "hop": 5
     },
     {
-      "hop": 5,
       "kind": "factor",
       "ref": "BRENT",
       "label": "All four exposures load on one factor",
       "detail": "Betas: POS 0.55, GEM 0.57, APAC Shipping 0.40, FCN 0.17.",
       "provenance": "estimated from instruments price history",
       "source_file": "instruments.csv",
-      "confidence": "medium"
+      "confidence": "medium",
+      "hop": 6
     },
     {
-      "hop": 6,
       "kind": "cash_need",
       "ref": "CN-017",
       "label": "USD 5,000,000 Singapore family office seed capital, 2027",
       "detail": "Funded from the same portfolio.",
       "provenance": "planned_cash_needs",
       "source_file": "planned_cash_needs.csv",
-      "confidence": "high"
+      "confidence": "high",
+      "hop": 7
+    },
+    {
+      "kind": "event",
+      "ref": "2026-03-04",
+      "label": "2026-03-04 - Strait of Hormuz effectively closed; Brent surges past USD 120",
+      "detail": "The same logged event is long his portfolio and long his operating business. Both sides of his balance sheet are one trade on one event.",
+      "provenance": "event_log.csv event_date - the authoritative record for 2026",
+      "source_file": "event_log.csv",
+      "confidence": "high",
+      "hop": 8
     }
   ],
   "projected_consequence": {
@@ -238,10 +258,10 @@
     ]
   },
   "governance": {
-    "armed_by": null,
-    "armed_at": null,
-    "armed_signature": null,
-    "armed_trigger_level": null,
+    "armed_by": "priscilla.ong@juliusbaer.com",
+    "armed_at": "2026-08-24T08:52:00+08:00",
+    "armed_signature": "6ca529039a040805fd915e6be61ebf4b8d731788f268ffd1cd3a99b984a39f24",
+    "armed_trigger_level": 79.0,
     "fired_at": null,
     "fired_observation": null,
     "resolution": null,
@@ -253,6 +273,20 @@
         "from": null,
         "to": "DRAFTED",
         "note": "Same scenario walk as PLAN-001; shared instrument SYN-SP-0505"
+      },
+      {
+        "at": "2026-08-24T08:52:00+08:00",
+        "actor": "priscilla.ong@juliusbaer.com",
+        "from": "DRAFTED",
+        "to": "ARMED",
+        "note": "Reviewed the overnight walk; armed unchanged at the drafted level"
+      },
+      {
+        "at": "2026-08-24T08:52:00+08:00",
+        "actor": "system",
+        "from": "ARMED",
+        "to": "WATCHING",
+        "note": "trigger registered with the watcher"
       }
     ]
   }

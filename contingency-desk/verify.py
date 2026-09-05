@@ -10,9 +10,11 @@ data/. Nothing here is an LLM output. Run before every rehearsal.
 import os, sys, json, datetime
 import pandas as pd
 
-HOME = os.environ["HOME"]
-DATA = f"{HOME}/mnt/SingHacks/singhacks-jb-wealth-intelligence/data"
-HERE = f"{HOME}/mnt/SingHacks/contingency-desk"
+HERE = os.path.dirname(os.path.abspath(__file__))
+DATA = os.environ.get("SINGHACKS_DATA") or os.path.join(
+    os.path.dirname(HERE), "singhacks-jb-wealth-intelligence", "data")
+if not os.path.isdir(DATA):
+    sys.exit(f"challenge data not found at {DATA} - set SINGHACKS_DATA to override")
 SNAPS = ["2025-12-31", "2026-02-27", "2026-03-31", "2026-06-30", "2026-08-26"]
 T = "2026-08-26"
 
@@ -260,6 +262,8 @@ for cid in ["CL-0001", "CL-0019", "CL-0002"]:
             "asset_class": x.asset_class, "market_value_usd": float(x.market_value_usd),
             "market_value_base": float(x.market_value_base),
             "weight_pct": float(x.weight_pct), "liquidity_tier": x.liquidity_tier,
+            "advance_rate_pct": float(x.advance_rate_pct),
+            "lending_value_base": float(x.lending_value_base),
             "beta": (b["beta"] if b else 0.0),
         })
 facts["positions"] = positions

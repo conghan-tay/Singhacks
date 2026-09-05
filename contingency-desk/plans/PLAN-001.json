@@ -78,64 +78,84 @@
   },
   "evidence_chain": [
     {
-      "hop": 1,
       "kind": "source_of_wealth",
       "ref": "CL-0001",
       "label": "Inherited - family coal mining and energy group",
       "detail": "Wealth outside the bank is the same factor as the wealth inside it.",
       "provenance": "clients.source_of_wealth",
       "source_file": "clients.csv",
-      "confidence": "high"
+      "confidence": "high",
+      "hop": 1
     },
     {
-      "hop": 2,
       "kind": "direct",
       "ref": "SYN-ST-0101",
       "label": "Bara Nusantara Energy Tbk - USD 19,287,977 = 41.42% of household wealth",
       "detail": "Held in PF-0002, a CUSTODY account. Mandate bands do not measure custody accounts, so this concentration appears on no mandate report.",
       "provenance": "holdings.instrument_id + portfolios.service_model",
       "source_file": "holdings.csv",
-      "confidence": "high"
+      "confidence": "high",
+      "hop": 2
     },
     {
-      "hop": 3,
       "kind": "structured_underlying",
       "ref": "SYN-SP-0505",
       "label": "Worst-of leg 3 of 3 in the Fixed Coupon Note held in PF-0001",
       "detail": "USD 1,662,484 = 6.18% of PF-0001, and 100% of its Structured Products allocation. The other two legs, Pacific Orient Shipping and Global Energy Majors, are the same trade. A three-name basket that is one factor.",
       "provenance": "instruments.underlying_reference",
       "source_file": "instruments.csv",
-      "confidence": "high"
+      "confidence": "high",
+      "hop": 3
     },
     {
-      "hop": 4,
       "kind": "collateral",
       "ref": "CF-0005",
       "label": "SGD 8,000,000 Lombard secured on PF-0002, margin call at 70%",
       "detail": "LTV 59.15% today. It was 78.50% at 2025-12-31 - already through the trigger - and was cured by the energy rally, not by a decision.",
       "provenance": "credit_facilities.collateral_portfolio_id",
       "source_file": "credit_facilities.csv",
-      "confidence": "high"
+      "confidence": "high",
+      "hop": 4
     },
     {
-      "hop": 5,
       "kind": "cash_need",
       "ref": "CN-001",
       "label": "SGD 9,000,000 Singapore property deposit, 2027-03-01 to 2027-06-30, Likely",
       "detail": "Corroborated by the RM note of 2026-04-14. Any cure funded from PF-0001 competes with this.",
       "provenance": "planned_cash_needs",
       "source_file": "planned_cash_needs.csv",
-      "confidence": "high"
+      "confidence": "high",
+      "hop": 5
     },
     {
-      "hop": 6,
+      "kind": "rm_note",
+      "ref": "N-002",
+      "label": "2026-04-14 - he asked what gives him more energy exposure; he subscribed the next day",
+      "detail": "The concentration is not drift. The bank sold him more of the factor he was already long, four months ago, and recorded the conversation that did it.",
+      "provenance": "rm_notes.json note_id N-002",
+      "source_file": "rm_notes.json",
+      "confidence": "high",
+      "hop": 6
+    },
+    {
       "kind": "factor",
       "ref": "BRENT",
       "label": "Bara beta 0.721 to Brent",
       "detail": "OLS through origin, 4 snapshot returns, R2 1.00.",
       "provenance": "estimated from instruments price history",
       "source_file": "instruments.csv",
-      "confidence": "medium"
+      "confidence": "medium",
+      "hop": 7
+    },
+    {
+      "kind": "event",
+      "ref": "2026-03-04",
+      "label": "2026-03-04 - Strait of Hormuz effectively closed; Brent surges past USD 120",
+      "detail": "Brent is at 101.50 because of a logged event. The trigger is that event reversing, not a new one being forecast - which is why the level can be derived instead of predicted.",
+      "provenance": "event_log.csv event_date - the authoritative record for 2026",
+      "source_file": "event_log.csv",
+      "confidence": "high",
+      "hop": 8
     }
   ],
   "projected_consequence": {
@@ -165,21 +185,27 @@
       },
       {
         "label": "At the pre-conflict Brent level (72.40)",
-        "value": "LTV 73.86%, cure requires SGD 418,143 cash or SGD 1,194,693 of additional collateral",
+        "value": "LTV 73.86%, cure = SGD 418,143 cash, or SGD 597,347 of additional lending value",
         "basis": "same engine, dial set to the 2026-02-27 observation"
+      },
+      {
+        "label": "What that cure costs in market value",
+        "value": "SGD 1,194,693 of Bara at its 50% advance rate, or SGD 702,761 of SYN-FI-0208 at 85%",
+        "basis": "holdings.advance_rate_pct - the advance rate, not the shortfall, decides how much stock a cure costs"
       }
     ]
   },
   "actions": [
     {
       "rank": 1,
-      "action": "Pre-agree a cure path now: earmark SGD 1.2m of PF-0001 short-duration fixed income (SYN-FI-0208) as the collateral top-up, documented before the trigger.",
+      "action": "Pre-agree a cure path now: earmark SGD 702,761 of PF-0001 short-duration fixed income (SYN-FI-0208, 85% advance rate) as the collateral top-up, documented before the trigger.",
       "rationale": "The cure is small if it is prepared and expensive if it is improvised. Deciding the source of funds while the client is calm is the entire point of arming a plan.",
-      "second_order": "Reduces PF-0001's fixed income from 25.17% toward the 15% band floor if drawn in full. Still in band, but it consumes the same liquidity CN-001 needs in March 2027.",
+      "second_order": "The holding is SGD 3,437,460 and daily-liquid, so the earmark is covered. Pledging it does not move the mandate; liquidating it to cure takes PF-0001 fixed income from 25.17% to 23.70%, still inside the 15-40% band. Either way it is the same liquidity CN-001 needs in March 2027.",
       "reversible": true,
       "requires": [
         "Client acknowledgement",
-        "Credit desk note on CF-0005"
+        "Credit desk note on CF-0005",
+        "Extension of the CF-0005 collateral pool from PF-0002 to PF-0001"
       ]
     },
     {

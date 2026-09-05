@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-05T02:52:56",
+  "generated_at": "2026-09-05T04:14:25",
   "as_of": "2026-08-26",
   "assumptions": {
     "single_factor": "All shocks are a single Brent factor. Betas are OLS through the origin on four snapshot-to-snapshot returns. Four observations is not a risk model; it is a stated, inspectable assumption.",
@@ -1099,6 +1099,8 @@
       "market_value_base": 9653280.0,
       "weight_pct": 26.5587,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 65.0,
+      "lending_value_base": 6274632.0,
       "beta": -0.04378763369640418
     },
     {
@@ -1111,6 +1113,8 @@
       "market_value_base": 5370144.0,
       "weight_pct": 14.7747,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 60.0,
+      "lending_value_base": 3222086.4,
       "beta": -0.0968524207056142
     },
     {
@@ -1123,6 +1127,8 @@
       "market_value_base": 3202076.8,
       "weight_pct": 8.8098,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 65.0,
+      "lending_value_base": 2081349.92,
       "beta": -0.06162538273658481
     },
     {
@@ -1135,6 +1141,8 @@
       "market_value_base": 5712876.0,
       "weight_pct": 15.7176,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 75.0,
+      "lending_value_base": 4284657.0,
       "beta": -0.07170931803726754
     },
     {
@@ -1147,6 +1155,8 @@
       "market_value_base": 3437460.0,
       "weight_pct": 9.4574,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 85.0,
+      "lending_value_base": 2921841.0,
       "beta": -0.017203211239176598
     },
     {
@@ -1159,6 +1169,8 @@
       "market_value_base": 2613686.4,
       "weight_pct": 7.1909,
       "liquidity_tier": "Monthly",
+      "advance_rate_pct": 30.0,
+      "lending_value_base": 784105.92,
       "beta": 0.1567577770510344
     },
     {
@@ -1171,6 +1183,8 @@
       "market_value_base": 2309756.8,
       "weight_pct": 6.3547,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 60.0,
+      "lending_value_base": 1385854.08,
       "beta": 0.14750018355128264
     },
     {
@@ -1183,6 +1197,8 @@
       "market_value_base": 2247678.36,
       "weight_pct": 6.184,
       "liquidity_tier": "Illiquid",
+      "advance_rate_pct": 30.0,
+      "lending_value_base": 674303.51,
       "beta": 0.1725816035444826
     },
     {
@@ -1195,6 +1211,8 @@
       "market_value_base": 1800000.0,
       "weight_pct": 4.9523,
       "liquidity_tier": "Monthly",
+      "advance_rate_pct": 90.0,
+      "lending_value_base": 1620000.0,
       "beta": 0.0
     },
     {
@@ -1207,6 +1225,8 @@
       "market_value_base": 26077344.28,
       "weight_pct": 97.9683,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 50.0,
+      "lending_value_base": 13038672.14,
       "beta": 0.7207161360952309
     },
     {
@@ -1219,6 +1239,8 @@
       "market_value_base": 540800.0,
       "weight_pct": 2.0317,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 90.0,
+      "lending_value_base": 486720.0,
       "beta": 0.0
     },
     {
@@ -1231,6 +1253,8 @@
       "market_value_base": 2862200.0,
       "weight_pct": 8.8849,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 60.0,
+      "lending_value_base": 1717320.0,
       "beta": 0.4015380608218946
     },
     {
@@ -1243,6 +1267,8 @@
       "market_value_base": 3676056.34,
       "weight_pct": 11.4113,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 50.0,
+      "lending_value_base": 1838028.17,
       "beta": 0.5499619240518954
     },
     {
@@ -1255,6 +1281,8 @@
       "market_value_base": 2878800.0,
       "weight_pct": 8.9364,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 65.0,
+      "lending_value_base": 1871220.0,
       "beta": 0.5652370034808187
     },
     {
@@ -1267,6 +1295,8 @@
       "market_value_base": 4156209.99,
       "weight_pct": 12.9018,
       "liquidity_tier": "Illiquid",
+      "advance_rate_pct": 30.0,
+      "lending_value_base": 1246863.0,
       "beta": 0.1725816035444826
     },
     {
@@ -1279,6 +1309,8 @@
       "market_value_base": 4284000.0,
       "weight_pct": 13.2985,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 65.0,
+      "lending_value_base": 2784600.0,
       "beta": -0.04378763369640418
     },
     {
@@ -1291,6 +1323,8 @@
       "market_value_base": 2988800.0,
       "weight_pct": 9.2779,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 65.0,
+      "lending_value_base": 1942720.0,
       "beta": -0.04377641371507663
     },
     {
@@ -1303,6 +1337,8 @@
       "market_value_base": 1986000.0,
       "weight_pct": 6.165,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 60.0,
+      "lending_value_base": 1191600.0,
       "beta": -0.0968524207056142
     },
     {
@@ -1315,6 +1351,8 @@
       "market_value_base": 2919000.0,
       "weight_pct": 9.0612,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 75.0,
+      "lending_value_base": 2189250.0,
       "beta": -0.07000131589240612
     },
     {
@@ -1327,6 +1365,8 @@
       "market_value_base": 2130000.0,
       "weight_pct": 6.612,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 55.0,
+      "lending_value_base": 1171500.0,
       "beta": -0.14147543317443748
     },
     {
@@ -1339,6 +1379,8 @@
       "market_value_base": 1933200.0,
       "weight_pct": 6.0011,
       "liquidity_tier": "Monthly",
+      "advance_rate_pct": 30.0,
+      "lending_value_base": 579960.0,
       "beta": 0.1567577770510344
     },
     {
@@ -1351,6 +1393,8 @@
       "market_value_base": 2400000.0,
       "weight_pct": 7.4501,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 90.0,
+      "lending_value_base": 2160000.0,
       "beta": 0.0
     },
     {
@@ -1363,6 +1407,8 @@
       "market_value_base": 3552600.0,
       "weight_pct": 24.0378,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 65.0,
+      "lending_value_base": 2309190.0,
       "beta": -0.06162538273658481
     },
     {
@@ -1375,6 +1421,8 @@
       "market_value_base": 2242800.0,
       "weight_pct": 15.1754,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 50.0,
+      "lending_value_base": 1121400.0,
       "beta": -0.11822341043439173
     },
     {
@@ -1387,6 +1435,8 @@
       "market_value_base": 2069600.0,
       "weight_pct": 14.0035,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 50.0,
+      "lending_value_base": 1034800.0,
       "beta": -0.09262343376943044
     },
     {
@@ -1399,6 +1449,8 @@
       "market_value_base": 1693800.0,
       "weight_pct": 11.4607,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 60.0,
+      "lending_value_base": 1016280.0,
       "beta": -0.09656560661936654
     },
     {
@@ -1411,6 +1463,8 @@
       "market_value_base": 1428000.0,
       "weight_pct": 9.6622,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 65.0,
+      "lending_value_base": 928200.0,
       "beta": -0.04378763369640418
     },
     {
@@ -1423,6 +1477,8 @@
       "market_value_base": 1220400.0,
       "weight_pct": 8.2576,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 85.0,
+      "lending_value_base": 1037340.0,
       "beta": -0.017203211239176598
     },
     {
@@ -1435,6 +1491,8 @@
       "market_value_base": 1572000.0,
       "weight_pct": 10.6366,
       "liquidity_tier": "Illiquid",
+      "advance_rate_pct": 30.0,
+      "lending_value_base": 471600.0,
       "beta": -0.08718110691882172
     },
     {
@@ -1447,6 +1505,8 @@
       "market_value_base": 1000000.0,
       "weight_pct": 6.7663,
       "liquidity_tier": "Daily",
+      "advance_rate_pct": 90.0,
+      "lending_value_base": 900000.0,
       "beta": 0.0
     },
     {
@@ -1459,6 +1519,8 @@
       "market_value_base": 31920000.0,
       "weight_pct": 100.0,
       "liquidity_tier": "Illiquid",
+      "advance_rate_pct": 0.0,
+      "lending_value_base": 0.0,
       "beta": 0.0
     }
   ]

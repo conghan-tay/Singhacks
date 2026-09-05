@@ -32,6 +32,7 @@ store.py     arm(plan, rm, trigger_level=None)  dismiss(plan, rm, reason)
              fire(plan, observation)            action(plan, rm, rank)
              sweep(plans, state, facts, evaluate) -> [plan_id, ...]
              armed_vs_now(plan, state)          signature(plan)
+             verify_signature(plan) -> {signed, ok, expected, actual}
              TransitionError, ALLOWED, and the state constants
 ```
 
@@ -60,6 +61,8 @@ Everything the three screens need is in there.
 ## The three screens
 
 **1. Board.** Four columns: `Fired` / `Armed and watching` / `Drafts awaiting you` / `Dismissed`.
+On load PLAN-003 is already `WATCHING` (it ships armed, on 2026-08-24) and PLAN-001 and PLAN-002 are
+`DRAFTED`, so the board opens with two columns populated. Do not "fix" that by arming the others.
 Cards move between columns as state changes. Each card: client name, plan title, severity,
 current distance to trigger as a percentage. Ranked within each column by severity then proximity.
 This screen is on stage for five seconds. Do not over-invest in it.
@@ -89,9 +92,15 @@ in this order:
 - **Actions bar**, state-dependent: `DRAFTED` -> [Arm] [Dismiss] with an editable trigger level;
   `FIRED` -> [Take action] [Stand down]; otherwise disabled.
 - When state is `FIRED`: a band at the top showing **projected at arming** versus **actual now**,
-  side by side, plus the armed signature, who armed it and when.
+  side by side, plus the armed signature, who armed it and when. Next to the signature render
+  `store.verify_signature(plan)["ok"]` as the words **signature verified** / **SIGNATURE MISMATCH**.
+  A hash on screen that nothing checks is decoration; the check is the claim.
 
 **3. Dial.** One slider, Brent, range 60 to 120, default 101.50, step 0.50.
+Also put a **Reset demo** button here: it reloads the plans from disk with `engine.load_plans()` and
+writes them back into `st.session_state`. `FIRED` has no path back in the state machine, by design,
+so without this an overshot slider or a second run-through means restarting Streamlit in front of
+the room.
 Mark 72.40 on the axis as *"pre-conflict, 2026-02-27"*. On change, call `engine.shock`, re-render
 the affected facility LTVs, and evaluate every `WATCHING` plan's trigger. Plans that trip move to
 `FIRED` and the board updates.
@@ -133,12 +142,15 @@ buttons and the slider are real Streamlit controls.
 
 ## Acceptance
 
-- `python3 -m pytest tests/ -q` still passes untouched (37 tests).
+- `python3 -m pytest tests/ -q` still passes untouched (40 tests).
 - `streamlit run app.py` works with the network disabled.
 - Every figure rendered can be traced to a key in `facts.json` or a plan JSON. No literals in the
   UI code except labels.
 - Walking PLAN-001 from `DRAFTED` to `ACTIONED` takes at most four clicks.
 - Every state change goes through `store.py`. `grep -n 'state.*=' ui.py app.py` shows no direct
   assignment to `plan["state"]`.
+- PLAN-003 loads `WATCHING` with a signature dated 2026-08-24; PLAN-001 loads `DRAFTED`. Arming
+  PLAN-001 on screen and then firing both is the demo: one card shows the mechanism, the other shows
+  an approval that provably predates the event.
 - The dial at 72.40 fires PLAN-001 and PLAN-003 together. **At 79.00 nothing fires** — that is
   correct behaviour, not a bug. The trigger solves at 78.85.

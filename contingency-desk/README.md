@@ -14,7 +14,7 @@ The MySingHacks repo is not on the demo path.
 | `plans/PLAN-001..003.json` | The three drafted plans. Numbers computed, prose hand-written |
 | `engine.py` | Deterministic engine: `shock`, `evaluate_trigger`. Arithmetic only. `python3 engine.py` demos it |
 | `store.py` | Plan state machine and the arming signature. `python3 store.py` walks DRAFTED → ACTIONED |
-| `tests/` | 37 assertions pinning the numbers, the plans, the engine and the state machine |
+| `tests/` | 40 assertions pinning the numbers, the plans, the engine and the state machine |
 | `docs/design.md` | Colour tokens, type scale, card anatomy, worked evidence-chain HTML/CSS |
 | `docs/architecture.md` | Demo architecture + production shape, for the feasibility slide |
 | `docs/sequence.md` | Arm → watch → fire, the dial, and why the signature matters |

@@ -51,32 +51,53 @@ def signature(plan: dict) -> str:
     return hashlib.sha256(json.dumps(body, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
-def _log(plan: dict, actor: str, to: str, note: str = "") -> None:
+def verify_signature(plan: dict) -> dict:
+    """Recompute the signature and compare it to the one written at arming.
+
+    Writing a hash proves nothing on its own; this is the function that makes the arming record an
+    assertion rather than a decoration. Call it every time a signature is put on screen.
+
+    Returns {signed, ok, expected, actual}. `ok` is None for a plan that was never armed.
+    """
+    expected = plan["governance"].get("armed_signature")
+    if not expected:
+        return {"signed": False, "ok": None, "expected": None, "actual": None}
+    actual = signature(plan)
+    return {"signed": True, "ok": actual == expected, "expected": expected, "actual": actual}
+
+
+def _log(plan: dict, actor: str, to: str, note: str = "", at: str | None = None) -> None:
     plan["governance"]["decision_log"].append(
-        {"at": _now(), "actor": actor, "from": plan["state"], "to": to, "note": note})
+        {"at": at or _now(), "actor": actor, "from": plan["state"], "to": to, "note": note})
 
 
-def _transition(plan: dict, to: str, actor: str, note: str = "") -> dict:
+def _transition(plan: dict, to: str, actor: str, note: str = "", at: str | None = None) -> dict:
     if to not in ALLOWED[plan["state"]]:
         raise TransitionError(f"{plan['plan_id']}: {plan['state']} -> {to} is not allowed")
-    _log(plan, actor, to, note)
+    _log(plan, actor, to, note, at)
     plan["state"] = to
     return plan
 
 
 # ------------------------------------------------------------------ human interrupt 1
-def arm(plan: dict, rm: str, trigger_level: float | None = None, note: str = "") -> dict:
-    """The RM signs the plan. Optionally at a level different from the drafted one."""
+def arm(plan: dict, rm: str, trigger_level: float | None = None, note: str = "",
+        at: str | None = None) -> dict:
+    """The RM signs the plan. Optionally at a level different from the drafted one.
+
+    `at` backdates the record. Its only legitimate caller is the offline authoring pass that seeds a
+    plan the RM armed before the demo window opened; the UI never passes it, so on any live path the
+    timestamp is wall-clock and the arming provably predates whatever fires it.
+    """
     plan = copy.deepcopy(plan)
     lvl = plan["trigger"]["level"] if trigger_level is None else float(trigger_level)
     g = plan["governance"]
     g["armed_by"] = rm
-    g["armed_at"] = _now()
+    g["armed_at"] = at or _now()
     g["armed_trigger_level"] = lvl
     g["armed_signature"] = signature(plan)
     edited = "" if lvl == plan["trigger"]["level"] else f" (level edited {plan['trigger']['level']:g} -> {lvl:g})"
-    _transition(plan, ARMED, rm, (note + edited).strip())
-    return _transition(plan, WATCHING, "system", "trigger registered with the watcher")
+    _transition(plan, ARMED, rm, (note + edited).strip(), at)
+    return _transition(plan, WATCHING, "system", "trigger registered with the watcher", at)
 
 
 def dismiss(plan: dict, rm: str, reason: str) -> dict:
@@ -133,6 +154,7 @@ def armed_vs_now(plan: dict, state: dict) -> dict | None:
     return {"armed_by": plan["governance"]["armed_by"], "armed_at": plan["governance"]["armed_at"],
             "armed_level": plan["governance"]["armed_trigger_level"],
             "signature": plan["governance"]["armed_signature"],
+            "signature_ok": verify_signature(plan)["ok"],
             "projected": plan["projected_consequence"]["items"],
             "observed_variable": o.get("variable"), "observed_value": o.get("observed"),
             "fired_at": plan["governance"]["fired_at"]}
@@ -146,13 +168,18 @@ if __name__ == "__main__":
     p = arm(p, "priscilla.ong@juliusbaer.com", trigger_level=79.0)
     print(p["state"], p["governance"]["armed_signature"][:16], "...")
     P["PLAN-001"] = p
-    P["PLAN-003"] = arm(P["PLAN-003"], "priscilla.ong@juliusbaer.com")
+    print("PLAN-003 ships pre-armed:", P["PLAN-003"]["state"],
+          P["PLAN-003"]["governance"]["armed_at"], verify_signature(P["PLAN-003"])["ok"])
     st = engine.shock(F, 72.40)
     print("fired:", sweep(P, st, F, engine.evaluate_trigger))
     P["PLAN-001"] = action(P["PLAN-001"], "priscilla.ong@juliusbaer.com", rank=1)
     print(P["PLAN-001"]["state"])
     for e in P["PLAN-001"]["governance"]["decision_log"]:
         print(f"   {e['at']}  {e['actor']:34s} {str(e['from']):9s} -> {e['to']:9s} {e['note'][:60]}")
+    print("signature verifies:", verify_signature(P["PLAN-001"]))
+    tampered = copy.deepcopy(P["PLAN-001"])
+    tampered["actions"][0]["second_order"] = "no downside at all"
+    print("after a quiet rewrite:", verify_signature(tampered)["ok"])
     try:
         arm(P["PLAN-001"], "x")
     except TransitionError as e:

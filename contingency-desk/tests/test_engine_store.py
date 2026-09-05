@@ -60,7 +60,7 @@ def test_full_walk_drafted_to_actioned(F, P):
     assert p["state"] == store.WATCHING
     assert p["governance"]["armed_signature"] and p["governance"]["armed_at"]
     P["PLAN-001"] = p
-    P["PLAN-003"] = store.arm(P["PLAN-003"], "priscilla.ong@juliusbaer.com")
+    assert P["PLAN-003"]["state"] == store.WATCHING, "PLAN-003 ships pre-armed; it is not armed here"
     fired = store.sweep(P, engine.shock(F, 72.40), F, engine.evaluate_trigger)
     assert set(fired) == {"PLAN-001", "PLAN-003"}
     done = store.action(P["PLAN-001"], "priscilla.ong@juliusbaer.com", rank=1)
@@ -91,8 +91,24 @@ def test_signature_changes_if_the_body_is_edited(P):
 
 
 def test_signature_ignores_governance(P):
-    p = store.arm(P["PLAN-003"], "rm")
+    p = store.arm(P["PLAN-002"], "rm")
     assert store.signature(p) == p["governance"]["armed_signature"]
+
+
+def test_prearmed_plan_carries_a_signature_written_before_the_event(P):
+    """PLAN-003 ships armed on 2026-08-24. The gap between arming and firing is the whole claim.
+
+    PLAN-001 stays DRAFTED so the RM performs the human interrupt live. One card demonstrates the
+    mechanism, the other demonstrates the artefact.
+    """
+    p3, p1 = P["PLAN-003"], P["PLAN-001"]
+    assert p1["state"] == store.DRAFTED and p1["governance"]["armed_at"] is None
+    assert p3["state"] == store.WATCHING
+    assert p3["governance"]["armed_at"] == "2026-08-24T08:52:00+08:00"
+    assert p3["governance"]["armed_by"] == "priscilla.ong@juliusbaer.com"
+    assert store.verify_signature(p3)["ok"] is True
+    assert [e["to"] for e in p3["governance"]["decision_log"]] == ["DRAFTED", "ARMED", "WATCHING"]
+    assert all(e["at"].startswith("2026-08-24") for e in p3["governance"]["decision_log"])
 
 
 def test_armed_vs_now_available_after_firing(F, P):
@@ -100,3 +116,21 @@ def test_armed_vs_now_available_after_firing(F, P):
     store.sweep(P, engine.shock(F, 72.40), F, engine.evaluate_trigger)
     v = store.armed_vs_now(P["PLAN-001"], engine.shock(F, 72.40))
     assert v["armed_level"] == 79.0 and v["observed_value"] == 72.40 and v["projected"]
+
+
+def test_signature_is_checked_not_just_written(P):
+    """Writing a hash proves nothing unless something recomputes it."""
+    unarmed = store.verify_signature(P["PLAN-002"])
+    assert unarmed == {"signed": False, "ok": None, "expected": None, "actual": None}
+
+    p = store.arm(P["PLAN-001"], "priscilla.ong@juliusbaer.com", trigger_level=79.0)
+    assert store.verify_signature(p)["ok"] is True
+
+    import copy
+    tampered = copy.deepcopy(p)
+    tampered["actions"][0]["second_order"] = "no downside at all"
+    assert store.verify_signature(tampered)["ok"] is False, "a quiet rewrite must not verify"
+
+    moved = store.fire(p, {"expression": "BRENT < 79", "variable": "BRENT", "observed": 72.40})
+    assert store.verify_signature(moved)["ok"] is True, "a legitimate state change must still verify"
+    assert store.armed_vs_now(moved, None)["signature_ok"] is True

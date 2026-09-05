@@ -9,7 +9,8 @@ import json, os, subprocess, sys
 import pytest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA = os.path.join(os.environ["HOME"], "mnt/SingHacks/singhacks-jb-wealth-intelligence/data")
+DATA = os.environ.get("SINGHACKS_DATA") or os.path.join(
+    os.path.dirname(ROOT), "singhacks-jb-wealth-intelligence", "data")
 
 
 @pytest.fixture(scope="session")
@@ -181,7 +182,9 @@ def test_plans_validate_against_schema(plans):
 
 
 def test_plans_start_drafted_and_unsigned(plans):
-    for pid, p in plans.items():
+    """The two plans the RM arms on stage. PLAN-003 ships pre-armed and is asserted separately."""
+    for pid in ("PLAN-001", "PLAN-002"):
+        p = plans[pid]
         assert p["state"] == "DRAFTED"
         assert p["governance"]["armed_by"] is None
         assert p["governance"]["armed_signature"] is None
@@ -229,3 +232,88 @@ def test_plan_numbers_match_facts(plans, facts):
 def test_shared_trigger_across_two_clients(plans):
     assert plans["PLAN-001"]["trigger"]["expression"] == plans["PLAN-003"]["trigger"]["expression"]
     assert plans["PLAN-001"]["client_id"] != plans["PLAN-003"]["client_id"]
+
+
+# --------------------------------------------------------------- single-position limit
+def test_pf0001_breaches_the_single_position_limit():
+    """BALG caps a single position at 15%. Two PF-0001 lines are above it.
+
+    PLAN-001's suitability check reports the largest line as 19.6% and the result as `pass`.
+    Neither survives contact with the file. This test pins the data; the verdict on that check is a
+    separate call and is deliberately not asserted here. If you change the check, change it to
+    something this test agrees with.
+    """
+    import csv
+    T = "2026-08-26"
+    cap = float(next(r for r in csv.DictReader(open(f"{DATA}/mandates.csv"))
+                     if r["mandate_code"] == "BALG")["max_single_position_pct"])
+    assert cap == 15.0
+    rows = [r for r in csv.DictReader(open(f"{DATA}/holdings.csv"))
+            if r["portfolio_id"] == "PF-0001" and r["snapshot_date"] == T]
+    tot = sum(float(r["market_value_base"]) for r in rows)
+    w = {r["instrument_id"]: 100 * float(r["market_value_base"]) / tot for r in rows}
+    assert approx(w["SYN-EQ-0001"], 26.56, 0.01), "the largest PF-0001 line is 26.56%, not 19.6%"
+    assert approx(w["SYN-FI-0204"], 15.72, 0.01)
+    assert sorted(i for i, v in w.items() if v > cap) == ["SYN-EQ-0001", "SYN-FI-0204"]
+
+
+# --------------------------------------------------------------- the cure costs what the advance rate says
+def test_cure_market_value_uses_the_right_advance_rate(plans, facts):
+    """A cure posted in Bara at 50% costs twice the market value of the same cure at 85%.
+
+    The failure this pins: quoting a Bara-denominated top-up in an action that posts a bond fund.
+    """
+    fi = next(p for p in facts["positions"]
+              if p["instrument_id"] == "SYN-FI-0208" and p["portfolio_id"] == "PF-0001")
+    bara = next(l for l in facts["facilities"]["CF-0005"]["legs"]
+                if l["instrument_id"] == "SYN-ST-0101")
+    assert fi["advance_rate_pct"] == 85.0 and bara["advance_rate"] == 50.0
+
+    cf5 = facts["facilities"]["CF-0005"]
+    m = 72.40 / facts["market"]["brent"]["2026-08-26"] - 1
+    gap = cf5["drawn"] / 0.70 - (cf5["lending_value"] + cf5["C"] * m)
+    assert approx(gap / (fi["advance_rate_pct"] / 100), 702_761, 1.0)
+
+    a1 = next(a for a in plans["PLAN-001"]["actions"] if a["rank"] == 1)
+    assert "702,761" in a1["action"] and "85% advance rate" in a1["action"]
+    assert "SYN-FI-0208" in a1["action"] and "1.2m" not in a1["action"]
+    costs = next(i for i in plans["PLAN-001"]["projected_consequence"]["items"]
+                 if i["label"] == "What that cure costs in market value")
+    assert "50% advance rate" in costs["value"] and "702,761" in costs["value"]
+
+
+# --------------------------------------------------------------- provenance must resolve
+def test_every_provenance_reference_resolves(plans):
+    """A hop that names a source file has to be findable in it. Provenance you cannot follow is decoration.
+
+    Also pins that the two narrative sources the challenge singles out - event_log.csv as the
+    authoritative record for 2026, and the RM's own notes - are in the chain rather than only in prose.
+    """
+    import csv
+    notes = {n["note_id"] for n in json.load(open(f"{DATA}/rm_notes.json"))}
+    events = {r["event_date"] for r in csv.DictReader(open(f"{DATA}/event_log.csv"))}
+    needs = {r["need_id"] for r in csv.DictReader(open(f"{DATA}/planned_cash_needs.csv"))}
+    facilities = {r["facility_id"] for r in csv.DictReader(open(f"{DATA}/credit_facilities.csv"))}
+    resolvers = {"rm_notes.json": notes, "event_log.csv": events,
+                 "planned_cash_needs.csv": needs, "credit_facilities.csv": facilities}
+
+    seen = set()
+    for pid, p in plans.items():
+        assert [h["hop"] for h in p["evidence_chain"]] == list(range(1, len(p["evidence_chain"]) + 1))
+        for h in p["evidence_chain"]:
+            seen.add(h["source_file"])
+            universe = resolvers.get(h["source_file"])
+            if universe is not None:
+                assert h["ref"] in universe, f"{pid} hop {h['hop']} cites {h['ref']}, absent from {h['source_file']}"
+    assert {"rm_notes.json", "event_log.csv"} <= seen
+
+
+def test_the_trigger_reverses_a_logged_event(plans):
+    """The pitch claim: this is not a forecast, it is a recorded event running backwards."""
+    import csv
+    closure = next(r for r in csv.DictReader(open(f"{DATA}/event_log.csv"))
+                   if r["event_date"] == "2026-03-04")
+    assert "Hormuz" in closure["description"] and closure["severity"] == "Severe"
+    for pid in ("PLAN-001", "PLAN-003"):
+        hop = next(h for h in plans[pid]["evidence_chain"] if h["kind"] == "event")
+        assert hop["ref"] == "2026-03-04" and hop["source_file"] == "event_log.csv"

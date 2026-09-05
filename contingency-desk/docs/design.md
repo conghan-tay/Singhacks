@@ -176,6 +176,12 @@ give you this density and will look like every other hackathon submission.
 
 Escape any text interpolated into HTML with `html.escape` — the plan prose contains quotes.
 
+**The trap that will cost you an hour.** `st.markdown(..., unsafe_allow_html=True)` runs the string
+through a Markdown parser first. A blank line inside your HTML splits it into two blocks, and any
+line indented four spaces becomes a `<pre>` code block — your card renders as visible tag soup.
+Emit the card as one string with **no blank lines and no leading indentation**, and smoke-test one
+small block through `st.markdown` before you build the rest.
+
 ## Accessibility floor
 
 Body text ≥ 13px. All text/background pairs above 4.5:1 (the tokens are chosen to satisfy this).
