@@ -1,0 +1,13 @@
+risk_factor_id,name,category,observable,current_value,source
+BRENT,Brent crude USD/bbl,Commodity price,Y,101.5,market_context.BRENT_USD_BBL
+BARA,Bara Nusantara Energy Tbk,Single name,Y,11340.0,instruments.price_2026-08-26
+POS,Pacific Orient Shipping Ltd,Single name,Y,31.9,instruments.price_2026-08-26
+GEM,Global Energy Majors,Sector,Y,239.9,instruments.price_2026-08-26
+APAC_SHIPPING,Asia Pacific shipping & logistics,Sector,Y,130.1,instruments.price_2026-08-26
+HELIOS,Helios Cloud Systems Inc,Single name,Y,258.7,instruments.price_2026-08-26
+INDONESIAN_COAL,Indonesian coal & energy complex,Source of wealth,N,,clients.source_of_wealth
+GULF_LOGISTICS,"Gulf logistics, ports & chartering",Source of wealth,N,,clients.source_of_wealth
+SGD_LOMBARD,SGD Lombard funding line,Funding,Y,,credit_facilities
+USD_LOMBARD,USD Lombard funding line,Funding,Y,,credit_facilities
+XAU,Gold,Commodity price,Y,4622.6,market_context.GOLD_USD_OZ
+US_DURATION,US long duration rates,Rates,Y,4.66,market_context.UST_10Y_PCT

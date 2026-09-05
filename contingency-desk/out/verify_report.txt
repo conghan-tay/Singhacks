@@ -1,0 +1,106 @@
+==============================================================================
+BRENT USD/bbl        12-31= 69.00  02-27= 72.40  03-31=104.00  06-30= 96.00  08-26=101.50
+  pre-conflict (2026-02-27) = 72.40   today = 101.50
+
+BRENT BETAS  (OLS through origin, 4 snapshot returns; single factor)
+  SYN-ST-0101  beta=+0.721  r2=1.00   Bara Nusantara Energy Tbk
+  SYN-ST-0104  beta=+0.550  r2=0.90   Pacific Orient Shipping Ltd
+  SYN-EQ-0008  beta=+0.565  r2=0.99   Global Energy Majors Equity Fund
+  SYN-EQ-0025  beta=+0.402  r2=0.92   Asia Pacific Shipping and Logistics Fund
+  SYN-SP-0505  beta=+0.173  r2=0.95   Fixed Coupon Note ref. Basket C, 9.20% p.a., 1
+  SYN-ST-0103  beta=-0.093  r2=-0.48   Helios Cloud Systems Inc
+  SYN-SP-0502  beta=-0.087  r2=0.25   Equity Linked Note ref. Helios Cloud Systems, 
+
+==============================================================================
+CL-0001  Hartono Wijaya Kusuma   household USD 46,571,821   (Balanced Growth, tol 6)
+   41.42%  PF-0002  Bara Nusantara Energy Tbk                      USD   19,287,977
+   15.33%  PF-0001  Global Developed Equity Index Fund             USD    7,140,000
+    9.07%  PF-0001  Asia Investment Grade Credit Fund              USD    4,225,500
+    8.53%  PF-0001  Asia ex-Japan Equity Fund                      USD    3,972,000
+    5.46%  PF-0001  Short Duration USD Bond Fund                   USD    2,542,500
+
+==============================================================================
+CL-0019  Abdullah Al-Mansoori   household USD 32,214,266   (Balanced Growth, tol 6)
+   13.30%  PF-0023  Global Developed Equity Index Fund             USD    4,284,000
+   12.90%  PF-0023  Fixed Coupon Note ref. Basket C, 9.20% p.a.,   USD    4,156,210
+   11.41%  PF-0023  Pacific Orient Shipping Ltd                    USD    3,676,056
+    9.28%  PF-0023  US Large Cap Core Fund                         USD    2,988,800
+    9.06%  PF-0023  Global Investment Grade Corporate Bond Fund    USD    2,919,000
+
+==============================================================================
+CL-0002  Ravi Chandrasekaran   household USD 46,699,200   (Growth, tol 8)
+   68.35%  PF-0004  Unlisted Holding - Aranya Technologies Pte L   USD   31,920,000
+    7.61%  PF-0003  US Technology Leaders Fund                     USD    3,552,600
+    4.80%  PF-0003  Meridian Semiconductor Corp                    USD    2,242,800
+    4.43%  PF-0003  Helios Cloud Systems Inc                       USD    2,069,600
+    3.63%  PF-0003  India Equity Fund                              USD    1,693,800
+   -> shipping+energy block SYN-SP-0505, SYN-ST-0104, SYN-EQ-0008, SYN-EQ-0025 = USD 13,573,266 = 42.13%
+
+==============================================================================
+FACILITIES — Brent level that puts each facility on margin call
+  (single-factor Brent shock, betas above, FX held constant)
+  CF-0001 CL-0002  LTV 73.71% vs 75%  collateral must move  -1.73%  ->  Brent rise to 128.67
+  CF-0002 CL-0014  LTV 69.41% vs 70%  collateral must move  -0.85%  ->  Brent rise to 106.46
+  CF-0003 CL-0013  LTV 20.39% vs 75%  collateral must move -72.82%  ->  Brent rise to 1172.60
+  CF-0004 CL-0011  LTV 32.29% vs 80%  collateral must move -59.64%  ->  Brent rise to 1002.21
+  CF-0005 CL-0001  LTV 59.15% vs 70%  collateral must move -15.50%  ->  Brent fall to 78.85
+
+------------------------------------------------------------------------------
+CF-0005 (Hartono) — the demo trigger, derived not asserted
+   2025-12-31  drawn SGD   8,000,000   LV   10,191,000   LTV  78.50%
+   2026-02-27  drawn SGD   8,000,000   LV   10,571,380   LTV  75.68%
+   2026-03-31  drawn SGD   8,000,000   LV   13,591,166   LTV  58.86%
+   2026-06-30  drawn SGD   8,000,000   LV   12,866,020   LTV  62.18%
+   2026-08-26  drawn SGD   8,000,000   LV   13,525,392   LTV  59.15%
+   required lending value at 70%      = 8,000,000 / 0.70 = SGD 11,428,571
+   today's lending value              = SGD 13,525,392
+   collateral pool must fall          = -15.50%
+   Bara beta to Brent                 = 0.721
+   => BRENT TRIGGER                   = USD 78.85   (today 101.50, pre-conflict 72.40)
+   Brent 79 is ABOVE the pre-conflict level. This is not a tail. It is the good scenario.
+
+==============================================================================
+DIAL: Brent 101.50 -> 79.00   (-22.17%)
+  CL-0001 Hartono Wijaya Kusuma      household     -3,004,373 USD  (-6.45% of wealth)
+        SYN-ST-0101  Bara Nusantara Energy Tbk                   -15.98%    -3,081,537
+        SYN-AL-0303  Tanjong Global Macro Fund                    -3.47%       -67,177
+        SYN-SP-0505  Fixed Coupon Note ref. Basket C, 9.20% p     -3.83%       -63,602
+        SYN-CM-0402  Gold Bullion ETF                             -3.27%       -55,860
+  CL-0019 Abdullah Al-Mansoori       household     -1,064,495 USD  (-3.30% of wealth)
+        SYN-ST-0104  Pacific Orient Shipping Ltd                 -12.19%      -448,158
+        SYN-EQ-0008  Global Energy Majors Equity Fund            -12.53%      -360,710
+        SYN-EQ-0025  Asia Pacific Shipping and Logistics Fund     -8.90%      -254,767
+        SYN-SP-0505  Fixed Coupon Note ref. Basket C, 9.20% p     -3.83%      -159,004
+  CL-0002 Ravi Chandrasekaran        household       +234,955 USD  (+0.50% of wealth)
+        SYN-FI-0208  Short Duration USD Bond Fund                 +0.38%        +4,654
+        SYN-EQ-0001  Global Developed Equity Index Fund           +0.97%       +13,861
+        SYN-SP-0502  Equity Linked Note ref. Helios Cloud Sys     +1.93%       +30,380
+        SYN-EQ-0022  India Equity Fund                            +2.14%       +36,258
+  facilities:
+        CF-0001  LTV  72.67%  vs trigger 75%
+        CF-0002  LTV  66.83%  vs trigger 70%
+        CF-0003  LTV  20.08%  vs trigger 75%
+        CF-0004  LTV  31.81%  vs trigger 80%
+        CF-0005  LTV  69.92%  vs trigger 70%
+
+==============================================================================
+MANDATE OPTICS — what the report shows vs what the household holds
+   PF-0001  Equity                  50.14%   band 40-65%   in band
+   PF-0001  Fixed Income            25.17%   band 15-40%   in band
+   PF-0001  Alternatives             7.19%   band 0-25%   in band
+   PF-0001  Commodities              6.35%   band 0-10%   in band
+   PF-0001  Structured Products      6.18%   band 0-15%   in band
+   PF-0001  Cash and Equivalents     4.95%   band 2-15%   in band
+   FCN SYN-SP-0505 shows on the mandate report as 6.18% of PF-0001 (USD 1,662,484) — within the 0-15% Structured Products band.
+   Bara SYN-ST-0101 sits in PF-0002 (Custody) = 41.42% of household wealth, measured by no mandate.
+
+PLANNED CASH NEEDS
+   CN-001 CL-0001  SGD 9,000,000  2027-03-01..2027-06-30  Likely  — Deposit on Singapore residential property purchase
+   CN-002 CL-0002  USD 4,200,000  2027-01-01..2027-04-30  Conditional on the sale completing  — Estimated Singapore tax on secondary share sale
+   CN-003 CL-0002  USD 2,000,000  2026-11-01..2027-03-31  Likely  — Family trust establishment and funding
+   CN-017 CL-0019  USD 5,000,000  2027-01-01..2027-12-31  Likely  — Seed capital for Singapore family office entity
+
+SHARED INSTRUMENTS (one dial turn, two clients)
+   SYN-SP-0505: CL-0001/PF-0001 USD 1,662,484, CL-0019/PF-0023 USD 4,156,210
+   SYN-ST-0104: CL-0012/PF-0014 USD 1,633,803, CL-0019/PF-0023 USD 3,676,056
+   SYN-EQ-0008: CL-0005/PF-0007 USD 2,159,100, CL-0019/PF-0023 USD 2,878,800

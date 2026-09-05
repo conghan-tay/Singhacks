@@ -1,0 +1,259 @@
+{
+  "plan_id": "PLAN-003",
+  "client_id": "CL-0019",
+  "client_name": "Abdullah Al-Mansoori",
+  "portfolio_ids": [
+    "PF-0023"
+  ],
+  "title": "Strait reopens: the Asia portfolio and the Gulf business fall together",
+  "severity": "high",
+  "state": "DRAFTED",
+  "authored": {
+    "by": "contingency-desk-authoring-agent",
+    "at": "2026-08-24T03:12:00+08:00",
+    "based_on_snapshot": "2026-08-26"
+  },
+  "trigger": {
+    "expression": "BRENT < 79.00",
+    "variable": "BRENT",
+    "operator": "<",
+    "level": 79.0,
+    "unit": "USD/bbl",
+    "current_value": 101.5,
+    "distance_pct": -22.17,
+    "evaluated_by": "deterministic",
+    "derivation": [
+      {
+        "step": "Same trigger as PLAN-001",
+        "value": "BRENT < 79.00",
+        "source": "shared risk factor"
+      },
+      {
+        "step": "Why the same level",
+        "value": "Both clients hold SYN-SP-0505. It is held by exactly two clients in the book.",
+        "source": "holdings.csv"
+      },
+      {
+        "step": "Identified block",
+        "value": "USD 13,573,266 = 42.13% of household wealth",
+        "source": "holdings, 4 instruments"
+      }
+    ]
+  },
+  "evidence_chain": [
+    {
+      "hop": 1,
+      "kind": "source_of_wealth",
+      "ref": "CL-0019",
+      "label": "Entrepreneur - Gulf logistics, port services and marine chartering",
+      "detail": "Charter rates are elevated because the Strait is closed. The operating business is long the same event as the portfolio.",
+      "provenance": "clients.source_of_wealth",
+      "source_file": "clients.csv",
+      "confidence": "high"
+    },
+    {
+      "hop": 2,
+      "kind": "direct",
+      "ref": "SYN-ST-0104",
+      "label": "Pacific Orient Shipping Ltd - 11.41% of household",
+      "detail": "Also a worst-of leg of the note below.",
+      "provenance": "holdings.instrument_id",
+      "source_file": "holdings.csv",
+      "confidence": "high"
+    },
+    {
+      "hop": 3,
+      "kind": "fund_sector",
+      "ref": "SYN-EQ-0008",
+      "label": "Global Energy Majors Equity Fund - 8.94% of household",
+      "detail": "Also a worst-of leg of the note below.",
+      "provenance": "instruments.sector (product control mapping)",
+      "source_file": "instruments.csv",
+      "confidence": "high"
+    },
+    {
+      "hop": 4,
+      "kind": "structured_underlying",
+      "ref": "SYN-SP-0505",
+      "label": "FCN worst-of: Pacific Orient Shipping / Global Energy Majors / Bara Nusantara",
+      "detail": "Two of the three legs are positions he already holds outright. The note doubles them rather than diversifying.",
+      "provenance": "instruments.underlying_reference",
+      "source_file": "instruments.csv",
+      "confidence": "high"
+    },
+    {
+      "hop": 5,
+      "kind": "factor",
+      "ref": "BRENT",
+      "label": "All four exposures load on one factor",
+      "detail": "Betas: POS 0.55, GEM 0.57, APAC Shipping 0.40, FCN 0.17.",
+      "provenance": "estimated from instruments price history",
+      "source_file": "instruments.csv",
+      "confidence": "medium"
+    },
+    {
+      "hop": 6,
+      "kind": "cash_need",
+      "ref": "CN-017",
+      "label": "USD 5,000,000 Singapore family office seed capital, 2027",
+      "detail": "Funded from the same portfolio.",
+      "provenance": "planned_cash_needs",
+      "source_file": "planned_cash_needs.csv",
+      "confidence": "high"
+    }
+  ],
+  "projected_consequence": {
+    "summary": "At Brent 79 the identified block falls about USD 1,064,495 (3.30% of wealth) at the same moment charter rates normalise against the business that funds him. The loss size is not the point - the correlation is.",
+    "household_delta_usd": -1064495.0,
+    "household_delta_pct": -3.3,
+    "items": [
+      {
+        "label": "Shipping and energy block",
+        "value": "USD 13,573,266 = 42.13% of household wealth",
+        "basis": "SYN-SP-0505, SYN-ST-0104, SYN-EQ-0008, SYN-EQ-0025"
+      },
+      {
+        "label": "Pacific Orient Shipping",
+        "value": "-12.19% = USD -448,158",
+        "basis": "beta 0.55"
+      },
+      {
+        "label": "Global Energy Majors",
+        "value": "-12.53% = USD -360,710",
+        "basis": "beta 0.57"
+      },
+      {
+        "label": "Asia Pacific Shipping and Logistics",
+        "value": "-8.90% = USD -254,767",
+        "basis": "beta 0.40"
+      },
+      {
+        "label": "FCN SYN-SP-0505",
+        "value": "-3.83% = USD -159,004",
+        "basis": "measured beta only - no barrier is modelled because the dataset gives none"
+      },
+      {
+        "label": "Operating business",
+        "value": "Charter rates normalise at the same time",
+        "basis": "Not quantified. Stated, not modelled."
+      }
+    ]
+  },
+  "actions": [
+    {
+      "rank": 1,
+      "action": "Model the reopening scenario and take it to him - he asked for exactly this on 2026-08-12.",
+      "rationale": "His note says 'We have not modelled this.' The answer is the deliverable.",
+      "second_order": "It will show that the portfolio he asked to be uncorrelated is 42% one factor. That is a difficult conversation, and it is the one he requested.",
+      "reversible": true,
+      "requires": []
+    },
+    {
+      "rank": 2,
+      "action": "Reduce SYN-ST-0104 and SYN-EQ-0008 - the two positions doubled by the note - by roughly a third.",
+      "rationale": "Removes the doubling without unwinding the note or crystallising the coupon.",
+      "second_order": "Realises gains: both names are well up since February. Tax domicile UAE, so no capital gains drag.",
+      "reversible": false,
+      "requires": [
+        "Advisory suitability sign-off"
+      ]
+    },
+    {
+      "rank": 3,
+      "action": "Redirect the CN-017 family office seed capital away from the block on funding.",
+      "rationale": "The next USD 5m is the cheapest diversification available - it has not been invested yet.",
+      "second_order": "Delays deployment while a target allocation is agreed.",
+      "reversible": true,
+      "requires": [
+        "Client agreement"
+      ]
+    },
+    {
+      "rank": 4,
+      "action": "Hold. He is positive on the sector and the note pays 9.20%.",
+      "rationale": "His view has been right since February.",
+      "second_order": "Concentrates the household on the outcome of one geopolitical event, on both sides of his balance sheet.",
+      "reversible": true,
+      "requires": []
+    }
+  ],
+  "client_script": {
+    "opening": "You asked in August what happens to the portfolio if the Strait reopens. We have modelled it. The answer is that the portfolio and the business move the same way, at the same time.",
+    "key_points": [
+      "Four positions - the note, Pacific Orient, the energy fund and the shipping fund - are 42% of the portfolio and they are one bet.",
+      "Two of them appear twice: you own them outright and the note references them again.",
+      "The reopening is the good outcome for the world and a bad one for this portfolio, at the same moment your charter rates normalise.",
+      "You told us in April that the point of this portfolio was to be uncorrelated with the Gulf business. Today it is not, and this is how we fix it."
+    ],
+    "likely_objection": "That his view on charter rates has been right, and the note pays 9.20%.",
+    "response": "It has been right. The issue is not the view, it is that you are expressing it three times - here, in the note, and in the business. We can keep the view and hold it once."
+  },
+  "suitability": {
+    "mandate_code": "BALG",
+    "risk_profile": "Balanced Growth",
+    "risk_tolerance": 6,
+    "verdict": "conflicts_with_stated_objective",
+    "objective_conflict": "Stated objective: 'Build wealth outside the Gulf region and outside the shipping sector.' 42.13% of the portfolio is shipping and energy, two names of it held twice.",
+    "checks": [
+      {
+        "check": "PF-0023 asset-class bands (BALG)",
+        "result": "pass",
+        "detail": "Within bands at 2026-08-26"
+      },
+      {
+        "check": "Single-position limit 15%",
+        "result": "pass",
+        "detail": "Largest single line is 13.30%"
+      },
+      {
+        "check": "Look-through factor concentration",
+        "result": "fail",
+        "detail": "42.13% on one factor once the worst-of legs are unpacked"
+      },
+      {
+        "check": "Correlation with source of wealth",
+        "result": "fail",
+        "detail": "Portfolio and operating business are long the same event"
+      },
+      {
+        "check": "Alignment with stated objective",
+        "result": "fail",
+        "detail": "Directly contradicts the objective recorded in clients.csv and repeated in the RM note of 2026-04-15"
+      }
+    ]
+  },
+  "assumptions": [
+    "Single factor: every move is driven by one Brent shock. Cross-asset and idiosyncratic risk is not modelled.",
+    "Betas are OLS through the origin on the four snapshot-to-snapshot returns (Bara beta 0.721, R2 1.00). Four observations is an assumption, not a risk model.",
+    "FX held at 2026-08-26. A Brent fall would plausibly move USDIDR, which moves the SGD value of the Bara collateral. Not modelled.",
+    "instruments.csv gives no barrier or strike for SYN-SP-0505, so no knock-in is modelled and none is assumed."
+  ],
+  "confidence": {
+    "level": "medium",
+    "basis": "Holdings, weights and the worst-of composition are exact. The factor loadings are estimated from four observations. The operating-business link is qualitative and RM-authored, not modelled.",
+    "what_we_would_check": [
+      "Actual charter-rate sensitivity of his business rather than a listed-shipping proxy",
+      "The FCN barrier, which the dataset does not provide",
+      "Whether the family office entity will hold assets correlated with the same factor"
+    ]
+  },
+  "governance": {
+    "armed_by": null,
+    "armed_at": null,
+    "armed_signature": null,
+    "armed_trigger_level": null,
+    "fired_at": null,
+    "fired_observation": null,
+    "resolution": null,
+    "resolution_reason": null,
+    "decision_log": [
+      {
+        "at": "2026-08-24T03:12:00+08:00",
+        "actor": "contingency-desk-authoring-agent",
+        "from": null,
+        "to": "DRAFTED",
+        "note": "Same scenario walk as PLAN-001; shared instrument SYN-SP-0505"
+      }
+    ]
+  }
+}

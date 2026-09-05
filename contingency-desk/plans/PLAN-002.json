@@ -1,0 +1,205 @@
+{
+  "plan_id": "PLAN-002",
+  "client_id": "CL-0001",
+  "client_name": "Hartono Wijaya Kusuma",
+  "portfolio_ids": [
+    "PF-0001",
+    "PF-0002"
+  ],
+  "title": "Early warning: protect the CN-001 property deposit before the facility tightens",
+  "severity": "medium",
+  "state": "DRAFTED",
+  "authored": {
+    "by": "contingency-desk-authoring-agent",
+    "at": "2026-08-24T03:12:00+08:00",
+    "based_on_snapshot": "2026-08-26"
+  },
+  "trigger": {
+    "expression": "CF-0005.LTV > 65.0",
+    "variable": "CF-0005.LTV",
+    "operator": ">",
+    "level": 65.0,
+    "unit": "%",
+    "current_value": 59.15,
+    "distance_pct": 9.89,
+    "evaluated_by": "deterministic",
+    "derivation": [
+      {
+        "step": "Trigger is on a metric the bank already monitors daily",
+        "value": "facility LTV, not a market forecast",
+        "source": "credit_facilities"
+      },
+      {
+        "step": "Current LTV",
+        "value": "59.15%",
+        "source": "credit_facilities.ltv_pct_2026-08-26"
+      },
+      {
+        "step": "Warning level",
+        "value": "65% - five points before the 70% margin call",
+        "source": "RM-set"
+      },
+      {
+        "step": "Equivalent Brent level",
+        "value": "USD 88.35",
+        "source": "arithmetic, for context only"
+      },
+      {
+        "step": "CN-001 window opens",
+        "value": "2027-03-01",
+        "source": "planned_cash_needs"
+      }
+    ]
+  },
+  "evidence_chain": [
+    {
+      "hop": 1,
+      "kind": "collateral",
+      "ref": "CF-0005",
+      "label": "SGD 8,000,000 drawn, LTV 59.15%",
+      "detail": "Secured on PF-0002, which is 98% Bara.",
+      "provenance": "credit_facilities",
+      "source_file": "credit_facilities.csv",
+      "confidence": "high"
+    },
+    {
+      "hop": 2,
+      "kind": "cash_need",
+      "ref": "CN-001",
+      "label": "SGD 9,000,000 property deposit, 2027-03-01 to 2027-06-30",
+      "detail": "Certainty: Likely. RM note 2026-04-14 confirms a Bukit Timah property, around SGD 9m.",
+      "provenance": "planned_cash_needs",
+      "source_file": "planned_cash_needs.csv",
+      "confidence": "high"
+    },
+    {
+      "hop": 3,
+      "kind": "direct",
+      "ref": "PF-0001",
+      "label": "The only realistic source of both the deposit and any collateral cure",
+      "detail": "PF-0002 cannot fund either without selling the shareholding he has refused to reduce.",
+      "provenance": "holdings + portfolios.service_model",
+      "source_file": "holdings.csv",
+      "confidence": "high"
+    }
+  ],
+  "projected_consequence": {
+    "summary": "If the facility reaches 65% LTV, the cure and the SGD 9m deposit draw on the same portfolio within months of each other. Funding both from PF-0001 leaves the household MORE concentrated in Bara, not less - the diversified assets are the ones that get sold.",
+    "items": [
+      {
+        "label": "Deposit due",
+        "value": "SGD 9,000,000, Mar-Jun 2027",
+        "basis": "planned_cash_needs CN-001"
+      },
+      {
+        "label": "Liquid mandate assets, PF-0001",
+        "value": "SGD 36.3m across daily-liquid funds and cash",
+        "basis": "holdings.liquidity_tier, PF-0001 at 2026-08-26"
+      },
+      {
+        "label": "Concentration after funding both from PF-0001",
+        "value": "Bara rises above 41.42% of household wealth",
+        "basis": "numerator unchanged, denominator falls"
+      }
+    ]
+  },
+  "actions": [
+    {
+      "rank": 1,
+      "action": "Ring-fence SGD 9m of PF-0001 daily-liquid assets against CN-001 now, and exclude them from the CF-0005 cure path.",
+      "rationale": "Two claims on one pool is the actual risk. Naming which assets serve which claim removes it.",
+      "second_order": "Constrains rebalancing inside PF-0001 for six months.",
+      "reversible": true,
+      "requires": [
+        "Client agreement"
+      ]
+    },
+    {
+      "rank": 2,
+      "action": "Repay SGD 2m of CF-0005 from PF-0001 cash, taking LTV to roughly 44%.",
+      "rationale": "Buys headroom ahead of both events.",
+      "second_order": "Gives up the leverage he took the facility for, and he is currently positive on energy.",
+      "reversible": true,
+      "requires": [
+        "Client agreement"
+      ]
+    },
+    {
+      "rank": 3,
+      "action": "Bring the deposit forward or fund it from outside the bank.",
+      "rationale": "Removes the collision entirely.",
+      "second_order": "Outside our visibility; may not be available. Requires asking about family group liquidity, which touches the topic he closed down in January.",
+      "reversible": true,
+      "requires": [
+        "Client disclosure"
+      ]
+    }
+  ],
+  "client_script": {
+    "opening": "You mentioned the Bukit Timah deposit in April - around SGD 9m, early next year. I want to make sure that money and the loan are not queuing for the same assets.",
+    "key_points": [
+      "The deposit and any top-up on the loan would both come out of the managed portfolio.",
+      "If we fund both from there, the share of your wealth sitting in the family company goes up, not down - which is the opposite of what you asked this relationship to do.",
+      "We can ring-fence the deposit now and it costs you nothing."
+    ],
+    "likely_objection": "That the loan is comfortable today at 59%.",
+    "response": "It is. It was also 78.5% in December, and it came back down because coal prices rose, not because we did anything. I would rather not depend on that twice."
+  },
+  "suitability": {
+    "mandate_code": "BALG",
+    "risk_profile": "Balanced Growth",
+    "risk_tolerance": 6,
+    "verdict": "consistent",
+    "objective_conflict": "",
+    "checks": [
+      {
+        "check": "Liquidity coverage for CN-001",
+        "result": "pass",
+        "detail": "PF-0001 holds sufficient daily-liquid assets today"
+      },
+      {
+        "check": "Liquidity coverage for CN-001 AND a CF-0005 cure",
+        "result": "fail",
+        "detail": "Both claims land within the same two quarters"
+      },
+      {
+        "check": "Effect on stated objective",
+        "result": "fail",
+        "detail": "Funding both from PF-0001 increases relative concentration in the operating business"
+      }
+    ]
+  },
+  "assumptions": [
+    "Single factor: every move is driven by one Brent shock. Cross-asset and idiosyncratic risk is not modelled.",
+    "Betas are OLS through the origin on the four snapshot-to-snapshot returns (Bara beta 0.721, R2 1.00). Four observations is an assumption, not a risk model.",
+    "FX held at 2026-08-26. A Brent fall would plausibly move USDIDR, which moves the SGD value of the Bara collateral. Not modelled.",
+    "instruments.csv gives no barrier or strike for SYN-SP-0505, so no knock-in is modelled and none is assumed."
+  ],
+  "confidence": {
+    "level": "high",
+    "basis": "Trigger is on a facility metric the bank computes daily. No market forecast is involved.",
+    "what_we_would_check": [
+      "Whether CN-001 is contractually committed or still indicative",
+      "Whether the property purchase can be debt-financed separately"
+    ]
+  },
+  "governance": {
+    "armed_by": null,
+    "armed_at": null,
+    "armed_signature": null,
+    "armed_trigger_level": null,
+    "fired_at": null,
+    "fired_observation": null,
+    "resolution": null,
+    "resolution_reason": null,
+    "decision_log": [
+      {
+        "at": "2026-08-24T03:12:00+08:00",
+        "actor": "contingency-desk-authoring-agent",
+        "from": null,
+        "to": "DRAFTED",
+        "note": "Liquidity collision detected between CN-001 and the CF-0005 cure path"
+      }
+    ]
+  }
+}

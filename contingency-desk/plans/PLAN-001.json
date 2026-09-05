@@ -1,0 +1,301 @@
+{
+  "plan_id": "PLAN-001",
+  "client_id": "CL-0001",
+  "client_name": "Hartono Wijaya Kusuma",
+  "portfolio_ids": [
+    "PF-0001",
+    "PF-0002"
+  ],
+  "title": "Strait reopens: CF-0005 margin call on the Bara collateral",
+  "severity": "high",
+  "state": "DRAFTED",
+  "authored": {
+    "by": "contingency-desk-authoring-agent",
+    "at": "2026-08-24T03:12:00+08:00",
+    "based_on_snapshot": "2026-08-26"
+  },
+  "trigger": {
+    "expression": "BRENT < 79.00",
+    "variable": "BRENT",
+    "operator": "<",
+    "level": 79.0,
+    "unit": "USD/bbl",
+    "current_value": 101.5,
+    "distance_pct": -22.17,
+    "evaluated_by": "deterministic",
+    "derivation": [
+      {
+        "step": "Facility CF-0005 drawn",
+        "value": "SGD 8,000,000",
+        "source": "credit_facilities.drawn_2026-08-26"
+      },
+      {
+        "step": "Margin-call LTV",
+        "value": "70%",
+        "source": "credit_facilities.margin_call_ltv_pct"
+      },
+      {
+        "step": "Lending value required at trigger",
+        "value": "SGD 8,000,000 / 0.70 = SGD 11,428,571",
+        "source": "arithmetic"
+      },
+      {
+        "step": "Lending value today",
+        "value": "SGD 13,525,392",
+        "source": "holdings.lending_value_base, PF-0002"
+      },
+      {
+        "step": "Collateral pool must fall",
+        "value": "-15.50%",
+        "source": "arithmetic"
+      },
+      {
+        "step": "Pool composition",
+        "value": "Bara SGD 26,077,344 @ 50% advance + USD Call Deposit SGD 540,800 @ 90%",
+        "source": "holdings.advance_rate_pct"
+      },
+      {
+        "step": "Bara beta to Brent",
+        "value": "0.721 (R2 1.00, 4 snapshot returns)",
+        "source": "instruments price history"
+      },
+      {
+        "step": "Implied Brent level",
+        "value": "USD 78.85",
+        "source": "arithmetic"
+      },
+      {
+        "step": "Armed at",
+        "value": "USD 79.00 (rounded down for margin)",
+        "source": "RM"
+      },
+      {
+        "step": "Reference: Brent before the conflict, 2026-02-27",
+        "value": "USD 72.40",
+        "source": "market_context.BRENT_USD_BBL"
+      }
+    ]
+  },
+  "evidence_chain": [
+    {
+      "hop": 1,
+      "kind": "source_of_wealth",
+      "ref": "CL-0001",
+      "label": "Inherited - family coal mining and energy group",
+      "detail": "Wealth outside the bank is the same factor as the wealth inside it.",
+      "provenance": "clients.source_of_wealth",
+      "source_file": "clients.csv",
+      "confidence": "high"
+    },
+    {
+      "hop": 2,
+      "kind": "direct",
+      "ref": "SYN-ST-0101",
+      "label": "Bara Nusantara Energy Tbk - USD 19,287,977 = 41.42% of household wealth",
+      "detail": "Held in PF-0002, a CUSTODY account. Mandate bands do not measure custody accounts, so this concentration appears on no mandate report.",
+      "provenance": "holdings.instrument_id + portfolios.service_model",
+      "source_file": "holdings.csv",
+      "confidence": "high"
+    },
+    {
+      "hop": 3,
+      "kind": "structured_underlying",
+      "ref": "SYN-SP-0505",
+      "label": "Worst-of leg 3 of 3 in the Fixed Coupon Note held in PF-0001",
+      "detail": "USD 1,662,484 = 6.18% of PF-0001, and 100% of its Structured Products allocation. The other two legs, Pacific Orient Shipping and Global Energy Majors, are the same trade. A three-name basket that is one factor.",
+      "provenance": "instruments.underlying_reference",
+      "source_file": "instruments.csv",
+      "confidence": "high"
+    },
+    {
+      "hop": 4,
+      "kind": "collateral",
+      "ref": "CF-0005",
+      "label": "SGD 8,000,000 Lombard secured on PF-0002, margin call at 70%",
+      "detail": "LTV 59.15% today. It was 78.50% at 2025-12-31 - already through the trigger - and was cured by the energy rally, not by a decision.",
+      "provenance": "credit_facilities.collateral_portfolio_id",
+      "source_file": "credit_facilities.csv",
+      "confidence": "high"
+    },
+    {
+      "hop": 5,
+      "kind": "cash_need",
+      "ref": "CN-001",
+      "label": "SGD 9,000,000 Singapore property deposit, 2027-03-01 to 2027-06-30, Likely",
+      "detail": "Corroborated by the RM note of 2026-04-14. Any cure funded from PF-0001 competes with this.",
+      "provenance": "planned_cash_needs",
+      "source_file": "planned_cash_needs.csv",
+      "confidence": "high"
+    },
+    {
+      "hop": 6,
+      "kind": "factor",
+      "ref": "BRENT",
+      "label": "Bara beta 0.721 to Brent",
+      "detail": "OLS through origin, 4 snapshot returns, R2 1.00.",
+      "provenance": "estimated from instruments price history",
+      "source_file": "instruments.csv",
+      "confidence": "medium"
+    }
+  ],
+  "projected_consequence": {
+    "summary": "At Brent 79, Bara falls -16.0% and CF-0005 reaches 69.92% LTV against a 70% trigger. The direct position loses USD 3,081,537. The same move takes the note's three worst-of legs down together, because they are one trade.",
+    "household_delta_usd": -3004373.0,
+    "household_delta_pct": -6.45,
+    "items": [
+      {
+        "label": "CF-0005 LTV",
+        "value": "59.15% -> 69.92% (trigger 70%)",
+        "basis": "lending value recomputed at the shocked Bara price"
+      },
+      {
+        "label": "Lending value",
+        "value": "SGD 13,525,392 -> SGD 11,442,273",
+        "basis": "holdings.lending_value_base x beta shock"
+      },
+      {
+        "label": "Bara direct position",
+        "value": "-15.98% = USD -3,081,537",
+        "basis": "beta x Brent move"
+      },
+      {
+        "label": "Household impact",
+        "value": "USD -3,004,373 (-6.45% of wealth)",
+        "basis": "all positions revalued at their own Brent beta"
+      },
+      {
+        "label": "At the pre-conflict Brent level (72.40)",
+        "value": "LTV 73.86%, cure requires SGD 418,143 cash or SGD 1,194,693 of additional collateral",
+        "basis": "same engine, dial set to the 2026-02-27 observation"
+      }
+    ]
+  },
+  "actions": [
+    {
+      "rank": 1,
+      "action": "Pre-agree a cure path now: earmark SGD 1.2m of PF-0001 short-duration fixed income (SYN-FI-0208) as the collateral top-up, documented before the trigger.",
+      "rationale": "The cure is small if it is prepared and expensive if it is improvised. Deciding the source of funds while the client is calm is the entire point of arming a plan.",
+      "second_order": "Reduces PF-0001's fixed income from 25.17% toward the 15% band floor if drawn in full. Still in band, but it consumes the same liquidity CN-001 needs in March 2027.",
+      "reversible": true,
+      "requires": [
+        "Client acknowledgement",
+        "Credit desk note on CF-0005"
+      ]
+    },
+    {
+      "rank": 2,
+      "action": "Reduce the FCN (SYN-SP-0505) position in PF-0001 at or before the next coupon.",
+      "rationale": "It is the only holding that is simultaneously inside the mandate and referencing the collateral. Selling it lowers correlated exposure without touching the shareholding he will not discuss.",
+      "second_order": "Forfeits the 9.20% coupon and crystallises against a note bought in April. He subscribed to it four months ago on his own view; expect resistance.",
+      "reversible": false,
+      "requires": [
+        "Advisory suitability sign-off",
+        "Secondary market bid"
+      ]
+    },
+    {
+      "rank": 3,
+      "action": "Reduce the Bara shareholding in PF-0002 by SGD 3-4m.",
+      "rationale": "The only action that addresses the 41.42% concentration itself rather than its symptoms.",
+      "second_order": "He refused this on 2026-01-08 and said it would be read as a signal by his uncles. Raising it before a margin call is a different conversation from raising it during one - which is the argument for having it now.",
+      "reversible": false,
+      "requires": [
+        "Client mandate",
+        "Family governance discussion"
+      ]
+    },
+    {
+      "rank": 4,
+      "action": "Do nothing and monitor.",
+      "rationale": "Defensible: the facility has 10.85 points of headroom today and cured itself once already.",
+      "second_order": "It cured by luck, not by decision. If Brent normalises before March 2027 the cure and the CN-001 deposit collide.",
+      "reversible": true,
+      "requires": []
+    }
+  ],
+  "client_script": {
+    "opening": "When we spoke in April you asked what gives you more exposure to the energy rally. I want to show you what the same position does if the rally ends - because that is the case we have not talked about.",
+    "key_points": [
+      "Your mandate report is green in every band. That is accurate, and it is also incomplete: the Bara shareholding sits in the custody account, which no mandate measures. Across both accounts it is 41% of your wealth with us.",
+      "The note you subscribed in April references three names. Two of them are shipping and energy, and the third is Bara. If the Strait reopens, all three move down together - the basket is one trade, not three.",
+      "The loan is secured on the Bara shares. If Brent goes back to roughly where it was in February - 72, before any of this started - the facility goes to about 74% against a 70% margin call.",
+      "I am not forecasting that. I am saying we should decide today where the money comes from if it happens, rather than deciding it in a phone call on the day."
+    ],
+    "likely_objection": "He will say he is not selling the family shareholding, and that reducing it would be read as a signal by his uncles.",
+    "response": "Then we do not touch it. We pre-agree the collateral top-up from the mandate portfolio and we take the correlated exposure down inside the mandate instead - which is the part he did not inherit and has no family view on."
+  },
+  "suitability": {
+    "mandate_code": "BALG",
+    "risk_profile": "Balanced Growth",
+    "risk_tolerance": 6,
+    "verdict": "conflicts_with_stated_objective",
+    "objective_conflict": "Stated objective is to 'diversify away from the family operating business'. The 2026-04-15 FCN subscription increased exposure to it, and the loan is secured on it.",
+    "checks": [
+      {
+        "check": "PF-0001 asset-class bands (BALG)",
+        "result": "pass",
+        "detail": "Equity 50.14% (40-65), FI 25.17% (15-40), Alt 7.19% (0-25), Comm 6.35% (0-10), SP 6.18% (0-15), Cash 4.95% (2-15)"
+      },
+      {
+        "check": "Single-position limit 15% within PF-0001",
+        "result": "pass",
+        "detail": "Largest is SYN-EQ-0001 at 19.6% of PF-0001 - a diversified index fund, not a single name"
+      },
+      {
+        "check": "Household single-name concentration",
+        "result": "not_measured",
+        "detail": "41.42% in SYN-ST-0101. PF-0002 is a custody account, so no mandate limit applies. This is the finding."
+      },
+      {
+        "check": "Look-through concentration incl. structured products",
+        "result": "fail",
+        "detail": "Bara appears directly and as a worst-of leg of SYN-SP-0505"
+      },
+      {
+        "check": "Liquidity vs planned cash needs",
+        "result": "fail",
+        "detail": "CN-001 SGD 9m due Mar-Jun 2027 competes with any collateral cure"
+      },
+      {
+        "check": "Risk tolerance 6 of 10 vs single-name concentration",
+        "result": "fail",
+        "detail": "41% in one emerging-market single name is not a tolerance-6 exposure"
+      }
+    ]
+  },
+  "assumptions": [
+    "Single factor: every move is driven by one Brent shock. Cross-asset and idiosyncratic risk is not modelled.",
+    "Betas are OLS through the origin on the four snapshot-to-snapshot returns (Bara beta 0.721, R2 1.00). Four observations is an assumption, not a risk model.",
+    "FX held at 2026-08-26. A Brent fall would plausibly move USDIDR, which moves the SGD value of the Bara collateral. Not modelled.",
+    "instruments.csv gives no barrier or strike for SYN-SP-0505, so no knock-in is modelled and none is assumed."
+  ],
+  "confidence": {
+    "level": "medium",
+    "basis": "The LTV arithmetic, the advance rates and the look-through mapping are exact and come straight from the files. The Brent level depends on a single-factor beta estimated from four observations.",
+    "what_we_would_check": [
+      "USDIDR sensitivity - the collateral is IDR-denominated and reported in SGD, so FX moves the LTV independently of the Bara price",
+      "The FCN barrier and strike, which the dataset does not provide",
+      "Whether the 50% advance rate on Bara is reviewed if concentration rises",
+      "Whether the family group has debt of its own secured on the same shares"
+    ]
+  },
+  "governance": {
+    "armed_by": null,
+    "armed_at": null,
+    "armed_signature": null,
+    "armed_trigger_level": null,
+    "fired_at": null,
+    "fired_observation": null,
+    "resolution": null,
+    "resolution_reason": null,
+    "decision_log": [
+      {
+        "at": "2026-08-24T03:12:00+08:00",
+        "actor": "contingency-desk-authoring-agent",
+        "from": null,
+        "to": "DRAFTED",
+        "note": "Overnight scenario walk: Strait reopens"
+      }
+    ]
+  }
+}

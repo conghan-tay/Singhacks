@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contingency-desk/schema/plan.schema.json",
+  "title": "Contingency Plan",
+  "description": "A pre-authored, RM-armed contingency plan. Authored by an agent, reviewed and armed by a human BEFORE the event, watched deterministically, fired on an observable trigger.",
+  "type": "object",
+  "required": ["plan_id","client_id","client_name","title","state","authored","trigger","evidence_chain","projected_consequence","actions","client_script","suitability","assumptions","confidence","governance"],
+  "additionalProperties": false,
+  "properties": {
+    "plan_id":     {"type":"string","pattern":"^PLAN-[0-9]{3}$"},
+    "client_id":   {"type":"string","pattern":"^CL-[0-9]{4}$"},
+    "client_name": {"type":"string"},
+    "portfolio_ids":{"type":"array","items":{"type":"string"}},
+    "title":       {"type":"string","maxLength":90},
+    "severity":    {"enum":["low","medium","high"]},
+    "state":       {"enum":["DRAFTED","ARMED","WATCHING","FIRED","ACTIONED","DISMISSED"]},
+
+    "authored": {
+      "type":"object","required":["by","at","based_on_snapshot"],"additionalProperties":false,
+      "properties":{
+        "by":{"type":"string","description":"Model or human that drafted the prose. Never evaluates a trigger."},
+        "at":{"type":"string","format":"date-time"},
+        "based_on_snapshot":{"type":"string","description":"Holdings snapshot the plan was computed against"}
+      }
+    },
+
+    "trigger": {
+      "type":"object",
+      "required":["expression","variable","operator","level","unit","current_value","distance_pct","derivation","evaluated_by"],
+      "additionalProperties": false,
+      "description":"Evaluated by deterministic code only. A trigger is never evaluated by a model.",
+      "properties":{
+        "expression":{"type":"string","examples":["BRENT < 79.00"]},
+        "variable":{"type":"string","description":"risk_factor_id or derived metric id"},
+        "operator":{"enum":["<","<=",">",">="]},
+        "level":{"type":"number"},
+        "unit":{"type":"string"},
+        "current_value":{"type":"number"},
+        "distance_pct":{"type":"number","description":"Signed % move from current_value to level"},
+        "evaluated_by":{"const":"deterministic"},
+        "derivation":{
+          "type":"array","minItems":1,
+          "description":"Every arithmetic step from the source data to the trigger level. Rendered on the card; nothing is asserted.",
+          "items":{"type":"object","required":["step","value"],"additionalProperties":false,
+            "properties":{"step":{"type":"string"},"value":{"type":"string"},"source":{"type":"string"}}}
+        }
+      }
+    },
+
+    "evidence_chain": {
+      "type":"array","minItems":2,
+      "description":"The path through the data, one row per hop. Each hop names its provenance and source file.",
+      "items":{"type":"object","required":["hop","kind","ref","label","provenance","source_file"],"additionalProperties":false,
+        "properties":{
+          "hop":{"type":"integer","minimum":1},
+          "kind":{"enum":["source_of_wealth","direct","fund_sector","structured_underlying","collateral","cash_need","factor"]},
+          "ref":{"type":"string","description":"instrument_id, client_id, facility_id, need_id or risk_factor_id"},
+          "label":{"type":"string"},
+          "detail":{"type":"string"},
+          "provenance":{"type":"string","description":"Which column or table this edge came from, or 'RM-authored'"},
+          "source_file":{"type":"string"},
+          "confidence":{"enum":["high","medium","low"]}
+        }}
+    },
+
+    "projected_consequence": {
+      "type":"object","required":["summary","items"],"additionalProperties":false,
+      "properties":{
+        "summary":{"type":"string"},
+        "household_delta_usd":{"type":"number"},
+        "household_delta_pct":{"type":"number"},
+        "items":{"type":"array","items":{"type":"object","required":["label","value"],"additionalProperties":false,
+          "properties":{"label":{"type":"string"},"value":{"type":"string"},"basis":{"type":"string"}}}}
+      }
+    },
+
+    "actions": {
+      "type":"array","minItems":2,
+      "items":{"type":"object","required":["rank","action","rationale","second_order","reversible"],"additionalProperties":false,
+        "properties":{
+          "rank":{"type":"integer","minimum":1},
+          "action":{"type":"string"},
+          "rationale":{"type":"string"},
+          "second_order":{"type":"string","description":"What this action costs or causes. Required - an action without a stated cost is not a recommendation."},
+          "reversible":{"type":"boolean"},
+          "requires":{"type":"array","items":{"type":"string"}}
+        }}
+    },
+
+    "client_script": {
+      "type":"object","required":["opening","key_points"],"additionalProperties":false,
+      "properties":{
+        "opening":{"type":"string"},
+        "key_points":{"type":"array","items":{"type":"string"}},
+        "likely_objection":{"type":"string"},
+        "response":{"type":"string"}
+      }
+    },
+
+    "suitability": {
+      "type":"object","required":["mandate_code","verdict","checks"],"additionalProperties":false,
+      "properties":{
+        "mandate_code":{"type":"string"},
+        "risk_profile":{"type":"string"},
+        "risk_tolerance":{"type":"integer"},
+        "verdict":{"enum":["consistent","conflicts_with_stated_objective","outside_mandate","insufficient_data"]},
+        "objective_conflict":{"type":"string"},
+        "checks":{"type":"array","items":{"type":"object","required":["check","result"],"additionalProperties":false,
+          "properties":{"check":{"type":"string"},"result":{"enum":["pass","fail","not_measured","n/a"]},"detail":{"type":"string"}}}}
+      }
+    },
+
+    "assumptions":{"type":"array","minItems":1,"items":{"type":"string"},
+      "description":"Rendered on the card, always visible. Never collapsed behind a toggle."},
+
+    "confidence": {
+      "type":"object","required":["level","basis","what_we_would_check"],"additionalProperties":false,
+      "properties":{
+        "level":{"enum":["high","medium","low"]},
+        "basis":{"type":"string"},
+        "what_we_would_check":{"type":"array","items":{"type":"string"}}
+      }
+    },
+
+    "governance": {
+      "type":"object","required":["decision_log"],"additionalProperties":false,
+      "properties":{
+        "armed_by":{"type":["string","null"]},
+        "armed_at":{"type":["string","null"],"format":"date-time"},
+        "armed_signature":{"type":["string","null"],"description":"sha256 over the canonical plan body at arming time. Proves the reasoning predates the event."},
+        "armed_trigger_level":{"type":["number","null"],"description":"The level the human armed, which may differ from the drafted level."},
+        "fired_at":{"type":["string","null"],"format":"date-time"},
+        "fired_observation":{"type":["object","null"],"additionalProperties":true},
+        "resolution":{"enum":["ACTIONED","DISMISSED",null]},
+        "resolution_reason":{"type":["string","null"]},
+        "decision_log":{"type":"array","items":{"type":"object","required":["at","actor","from","to"],"additionalProperties":false,
+          "properties":{"at":{"type":"string"},"actor":{"type":"string"},"from":{"type":["string","null"]},"to":{"type":"string"},"note":{"type":"string"}}}}
+      }
+    }
+  }
+}

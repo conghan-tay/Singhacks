@@ -1,0 +1,1465 @@
+{
+  "generated_at": "2026-09-05T02:52:56",
+  "as_of": "2026-08-26",
+  "assumptions": {
+    "single_factor": "All shocks are a single Brent factor. Betas are OLS through the origin on four snapshot-to-snapshot returns. Four observations is not a risk model; it is a stated, inspectable assumption.",
+    "fx_constant": "FX held at 2026-08-26. A Brent fall would plausibly move USDIDR, which would move the SGD value of the Bara collateral. Not modelled. Named on screen.",
+    "no_barrier": "instruments.csv gives no barrier level for SYN-SP-0505, so no knock-in is modelled. The FCN is shown at its Brent beta only; the real point is that all three worst-of legs are the same trade.",
+    "private_lag": "Private and quarterly-reported valuations lag by a quarter. Untouched."
+  },
+  "clients": {
+    "CL-0001": {
+      "name": "Hartono Wijaya Kusuma",
+      "age": 34,
+      "risk_profile": "Balanced Growth",
+      "risk_tolerance": 6,
+      "tax_domicile": "Indonesia",
+      "source_of_wealth": "Inherited - family coal mining and energy group",
+      "objectives": "Preserve family wealth outside Indonesia; diversify away from the family operating business; fund a planned property purchase in Singapore in 2027",
+      "household_usd": 46571821.480000004,
+      "top": [
+        {
+          "instrument_id": "SYN-ST-0101",
+          "name": "Bara Nusantara Energy Tbk",
+          "portfolio_id": "PF-0002",
+          "usd": 19287976.54,
+          "pct_household": 41.41555113596557
+        },
+        {
+          "instrument_id": "SYN-EQ-0001",
+          "name": "Global Developed Equity Index Fund",
+          "portfolio_id": "PF-0001",
+          "usd": 7140000.0,
+          "pct_household": 15.33115899936667
+        },
+        {
+          "instrument_id": "SYN-FI-0204",
+          "name": "Asia Investment Grade Credit Fund",
+          "portfolio_id": "PF-0001",
+          "usd": 4225500.0,
+          "pct_household": 9.073082962440317
+        },
+        {
+          "instrument_id": "SYN-EQ-0020",
+          "name": "Asia ex-Japan Equity Fund",
+          "portfolio_id": "PF-0001",
+          "usd": 3972000.0,
+          "pct_household": 8.528762401328349
+        },
+        {
+          "instrument_id": "SYN-FI-0208",
+          "name": "Short Duration USD Bond Fund",
+          "portfolio_id": "PF-0001",
+          "usd": 2542500.0,
+          "pct_household": 5.459309769732458
+        },
+        {
+          "instrument_id": "SYN-EQ-0003",
+          "name": "US Technology Leaders Fund",
+          "portfolio_id": "PF-0001",
+          "usd": 2368400.0,
+          "pct_household": 5.085478567801123
+        }
+      ],
+      "cash_needs": [
+        {
+          "need_id": "CN-001",
+          "ccy": "SGD",
+          "amount": 9000000.0,
+          "from": "2027-03-01",
+          "to": "2027-06-30",
+          "certainty": "Likely",
+          "desc": "Deposit on Singapore residential property purchase"
+        }
+      ]
+    },
+    "CL-0019": {
+      "name": "Abdullah Al-Mansoori",
+      "age": 49,
+      "risk_profile": "Balanced Growth",
+      "risk_tolerance": 6,
+      "tax_domicile": "United Arab Emirates",
+      "source_of_wealth": "Entrepreneur - Gulf logistics, port services and marine chartering",
+      "objectives": "Build wealth outside the Gulf region and outside the shipping sector; fund a family office in Asia; long-term capital growth",
+      "household_usd": 32214266.33,
+      "top": [
+        {
+          "instrument_id": "SYN-EQ-0001",
+          "name": "Global Developed Equity Index Fund",
+          "portfolio_id": "PF-0023",
+          "usd": 4284000.0,
+          "pct_household": 13.29845589564293
+        },
+        {
+          "instrument_id": "SYN-SP-0505",
+          "name": "Fixed Coupon Note ref. Basket C, 9.20% p.a., 12M",
+          "portfolio_id": "PF-0023",
+          "usd": 4156209.99,
+          "pct_household": 12.901768264483087
+        },
+        {
+          "instrument_id": "SYN-ST-0104",
+          "name": "Pacific Orient Shipping Ltd",
+          "portfolio_id": "PF-0023",
+          "usd": 3676056.34,
+          "pct_household": 11.411268232350274
+        },
+        {
+          "instrument_id": "SYN-EQ-0002",
+          "name": "US Large Cap Core Fund",
+          "portfolio_id": "PF-0023",
+          "usd": 2988800.0,
+          "pct_household": 9.27787697966797
+        },
+        {
+          "instrument_id": "SYN-FI-0203",
+          "name": "Global Investment Grade Corporate Bond Fund",
+          "portfolio_id": "PF-0023",
+          "usd": 2919000.0,
+          "pct_household": 9.061202791639055
+        },
+        {
+          "instrument_id": "SYN-EQ-0008",
+          "name": "Global Energy Majors Equity Fund",
+          "portfolio_id": "PF-0023",
+          "usd": 2878800.0,
+          "pct_household": 8.936413359565094
+        }
+      ],
+      "shipping_energy_block": {
+        "instruments": [
+          "SYN-SP-0505",
+          "SYN-ST-0104",
+          "SYN-EQ-0008",
+          "SYN-EQ-0025"
+        ],
+        "usd": 13573266.33,
+        "pct": 42.1343332514753
+      },
+      "cash_needs": [
+        {
+          "need_id": "CN-017",
+          "ccy": "USD",
+          "amount": 5000000.0,
+          "from": "2027-01-01",
+          "to": "2027-12-31",
+          "certainty": "Likely",
+          "desc": "Seed capital for Singapore family office entity"
+        }
+      ]
+    },
+    "CL-0002": {
+      "name": "Ravi Chandrasekaran",
+      "age": 41,
+      "risk_profile": "Growth",
+      "risk_tolerance": 8,
+      "tax_domicile": "Singapore",
+      "source_of_wealth": "Entrepreneur - founder of enterprise software business",
+      "objectives": "Bridge liquidity until the secondary sale of founder shares expected Q4 2026; build a diversified portfolio post-event; establish a family trust",
+      "household_usd": 46699200.0,
+      "top": [
+        {
+          "instrument_id": "SYN-AL-0308",
+          "name": "Unlisted Holding - Aranya Technologies Pte Ltd",
+          "portfolio_id": "PF-0004",
+          "usd": 31920000.0,
+          "pct_household": 68.35234864837085
+        },
+        {
+          "instrument_id": "SYN-EQ-0003",
+          "name": "US Technology Leaders Fund",
+          "portfolio_id": "PF-0003",
+          "usd": 3552600.0,
+          "pct_household": 7.607410833590297
+        },
+        {
+          "instrument_id": "SYN-ST-0102",
+          "name": "Meridian Semiconductor Corp",
+          "portfolio_id": "PF-0003",
+          "usd": 2242800.0,
+          "pct_household": 4.802651865556584
+        },
+        {
+          "instrument_id": "SYN-ST-0103",
+          "name": "Helios Cloud Systems Inc",
+          "portfolio_id": "PF-0003",
+          "usd": 2069600.0,
+          "pct_household": 4.431767567752766
+        },
+        {
+          "instrument_id": "SYN-EQ-0022",
+          "name": "India Equity Fund",
+          "portfolio_id": "PF-0003",
+          "usd": 1693800.0,
+          "pct_household": 3.6270428615479493
+        },
+        {
+          "instrument_id": "SYN-SP-0502",
+          "name": "Equity Linked Note ref. Helios Cloud Systems, 11.00% p.a., 6M",
+          "portfolio_id": "PF-0003",
+          "usd": 1572000.0,
+          "pct_household": 3.3662246890739027
+        }
+      ],
+      "cash_needs": [
+        {
+          "need_id": "CN-002",
+          "ccy": "USD",
+          "amount": 4200000.0,
+          "from": "2027-01-01",
+          "to": "2027-04-30",
+          "certainty": "Conditional on the sale completing",
+          "desc": "Estimated Singapore tax on secondary share sale"
+        },
+        {
+          "need_id": "CN-003",
+          "ccy": "USD",
+          "amount": 2000000.0,
+          "from": "2026-11-01",
+          "to": "2027-03-31",
+          "certainty": "Likely",
+          "desc": "Family trust establishment and funding"
+        }
+      ]
+    }
+  },
+  "facilities": {
+    "CF-0001": {
+      "facility_id": "CF-0001",
+      "client_id": "CL-0002",
+      "portfolio": "PF-0003",
+      "ccy": "USD",
+      "drawn": 6500000.0,
+      "lending_value": 8818810.0,
+      "ltv_now": 73.71,
+      "trigger_ltv": 75.0,
+      "lending_value_at_trigger": 8666666.666666666,
+      "C": -568468.7447491238,
+      "brent_trigger": 128.66516690842607,
+      "collateral_move_required": -0.01725213870503317,
+      "legs": [
+        {
+          "instrument_id": "SYN-EQ-0003",
+          "name": "US Technology Leaders Fund",
+          "mv_base": 3552600.0,
+          "advance_rate": 65.0,
+          "lending_value": 2309190.0,
+          "beta": -0.06162538273658481
+        },
+        {
+          "instrument_id": "SYN-ST-0102",
+          "name": "Meridian Semiconductor Corp",
+          "mv_base": 2242800.0,
+          "advance_rate": 50.0,
+          "lending_value": 1121400.0,
+          "beta": -0.11822341043439173
+        },
+        {
+          "instrument_id": "SYN-ST-0103",
+          "name": "Helios Cloud Systems Inc",
+          "mv_base": 2069600.0,
+          "advance_rate": 50.0,
+          "lending_value": 1034800.0,
+          "beta": -0.09262343376943044
+        },
+        {
+          "instrument_id": "SYN-EQ-0022",
+          "name": "India Equity Fund",
+          "mv_base": 1693800.0,
+          "advance_rate": 60.0,
+          "lending_value": 1016280.0,
+          "beta": -0.09656560661936654
+        },
+        {
+          "instrument_id": "SYN-EQ-0001",
+          "name": "Global Developed Equity Index Fund",
+          "mv_base": 1428000.0,
+          "advance_rate": 65.0,
+          "lending_value": 928200.0,
+          "beta": -0.04378763369640418
+        },
+        {
+          "instrument_id": "SYN-FI-0208",
+          "name": "Short Duration USD Bond Fund",
+          "mv_base": 1220400.0,
+          "advance_rate": 85.0,
+          "lending_value": 1037340.0,
+          "beta": -0.017203211239176598
+        },
+        {
+          "instrument_id": "SYN-SP-0502",
+          "name": "Equity Linked Note ref. Helios Cloud Systems, 11.00% p.a., 6M",
+          "mv_base": 1572000.0,
+          "advance_rate": 30.0,
+          "lending_value": 471600.0,
+          "beta": -0.08718110691882172
+        },
+        {
+          "instrument_id": "SYN-CA-0601",
+          "name": "USD Call Deposit",
+          "mv_base": 1000000.0,
+          "advance_rate": 90.0,
+          "lending_value": 900000.0,
+          "beta": 0.0
+        }
+      ],
+      "history": [
+        {
+          "date": "2025-12-31",
+          "drawn": 4800000.0,
+          "collateral_mv": 11876500.0,
+          "lending_value": 7580970.0,
+          "ltv": 63.32
+        },
+        {
+          "date": "2026-02-27",
+          "drawn": 4800000.0,
+          "collateral_mv": 12683100.0,
+          "lending_value": 8037340.0,
+          "ltv": 59.72
+        },
+        {
+          "date": "2026-03-31",
+          "drawn": 4800000.0,
+          "collateral_mv": 12231550.0,
+          "lending_value": 7782285.0,
+          "ltv": 61.68
+        },
+        {
+          "date": "2026-06-30",
+          "drawn": 6500000.0,
+          "collateral_mv": 14370100.0,
+          "lending_value": 8593650.0,
+          "ltv": 75.64
+        },
+        {
+          "date": "2026-08-26",
+          "drawn": 6500000.0,
+          "collateral_mv": 14779200.0,
+          "lending_value": 8818810.0,
+          "ltv": 73.71
+        }
+      ]
+    },
+    "CF-0002": {
+      "facility_id": "CF-0002",
+      "client_id": "CL-0014",
+      "portfolio": "PF-0016",
+      "ccy": "HKD",
+      "drawn": 58000000.0,
+      "lending_value": 83565930.0,
+      "ltv_now": 69.41,
+      "trigger_ltv": 70.0,
+      "lending_value_at_trigger": 82857142.85714287,
+      "C": -14513312.88030146,
+      "brent_trigger": 106.45695886895982,
+      "collateral_move_required": -0.00848177173229725,
+      "legs": [
+        {
+          "instrument_id": "SYN-FI-0207",
+          "name": "Golden Harbour Properties 5.25% Perpetual",
+          "mv_base": 26616480.0,
+          "advance_rate": 50.0,
+          "lending_value": 13308240.0,
+          "beta": -0.34476140221872437
+        },
+        {
+          "instrument_id": "SYN-FI-0206",
+          "name": "Pacific Rim Bank 4.75% Perpetual",
+          "mv_base": 36339930.0,
+          "advance_rate": 50.0,
+          "lending_value": 18169965.0,
+          "beta": -0.17634983560525497
+        },
+        {
+          "instrument_id": "SYN-ST-0106",
+          "name": "Golden Harbour Properties Ltd",
+          "mv_base": 19740000.0,
+          "advance_rate": 50.0,
+          "lending_value": 9870000.0,
+          "beta": -0.27885706745559646
+        },
+        {
+          "instrument_id": "SYN-SP-0503",
+          "name": "Accumulator ref. Golden Harbour Properties Ltd, 12M",
+          "mv_base": 14575000.0,
+          "advance_rate": 0.0,
+          "lending_value": 0.0,
+          "beta": -0.45440229963245526
+        },
+        {
+          "instrument_id": "SYN-EQ-0021",
+          "name": "Greater China Equity Fund",
+          "mv_base": 28640000.0,
+          "advance_rate": 60.0,
+          "lending_value": 17184000.0,
+          "beta": -0.1069501882708935
+        },
+        {
+          "instrument_id": "SYN-FI-0205",
+          "name": "Asia High Yield Bond Fund",
+          "mv_base": 28467450.0,
+          "advance_rate": 50.0,
+          "lending_value": 14233725.0,
+          "beta": -0.14969544269691426
+        },
+        {
+          "instrument_id": "SYN-AL-0307",
+          "name": "Direct Property - Mid-Levels Apartment",
+          "mv_base": 40500000.0,
+          "advance_rate": 0.0,
+          "lending_value": 0.0,
+          "beta": 0.013591617890523874
+        },
+        {
+          "instrument_id": "SYN-CA-0603",
+          "name": "HKD Call Deposit",
+          "mv_base": 12000000.0,
+          "advance_rate": 90.0,
+          "lending_value": 10800000.0,
+          "beta": 0.0
+        }
+      ],
+      "history": [
+        {
+          "date": "2025-12-31",
+          "drawn": 52000000.0,
+          "collateral_mv": 219536340.0,
+          "lending_value": 96420170.0,
+          "ltv": 53.93
+        },
+        {
+          "date": "2026-02-27",
+          "drawn": 52000000.0,
+          "collateral_mv": 245469500.0,
+          "lending_value": 97141750.0,
+          "ltv": 53.53
+        },
+        {
+          "date": "2026-03-31",
+          "drawn": 58000000.0,
+          "collateral_mv": 222792925.0,
+          "lending_value": 88390462.5,
+          "ltv": 65.62
+        },
+        {
+          "date": "2026-06-30",
+          "drawn": 58000000.0,
+          "collateral_mv": 212160650.0,
+          "lending_value": 85350325.0,
+          "ltv": 67.96
+        },
+        {
+          "date": "2026-08-26",
+          "drawn": 58000000.0,
+          "collateral_mv": 206878860.0,
+          "lending_value": 83565930.0,
+          "ltv": 69.41
+        }
+      ]
+    },
+    "CF-0003": {
+      "facility_id": "CF-0003",
+      "client_id": "CL-0013",
+      "portfolio": "PF-0015",
+      "ccy": "USD",
+      "drawn": 4200000.0,
+      "lending_value": 20599640.47,
+      "ltv_now": 20.39,
+      "trigger_ltv": 75.0,
+      "lending_value_at_trigger": 5600000.0,
+      "C": -1421395.6386193123,
+      "brent_trigger": 1172.604670888016,
+      "collateral_move_required": -0.7281505952419178,
+      "legs": [
+        {
+          "instrument_id": "SYN-EQ-0003",
+          "name": "US Technology Leaders Fund",
+          "mv_base": 8289400.0,
+          "advance_rate": 65.0,
+          "lending_value": 5388110.0,
+          "beta": -0.06162538273658481
+        },
+        {
+          "instrument_id": "SYN-ST-0103",
+          "name": "Helios Cloud Systems Inc",
+          "mv_base": 5691400.0,
+          "advance_rate": 50.0,
+          "lending_value": 2845700.0,
+          "beta": -0.09262343376943044
+        },
+        {
+          "instrument_id": "SYN-ST-0102",
+          "name": "Meridian Semiconductor Corp",
+          "mv_base": 4485600.0,
+          "advance_rate": 50.0,
+          "lending_value": 2242800.0,
+          "beta": -0.11822341043439173
+        },
+        {
+          "instrument_id": "SYN-EQ-0021",
+          "name": "Greater China Equity Fund",
+          "mv_base": 3300384.12,
+          "advance_rate": 60.0,
+          "lending_value": 1980230.47,
+          "beta": -0.1069501882708935
+        },
+        {
+          "instrument_id": "SYN-EQ-0002",
+          "name": "US Large Cap Core Fund",
+          "mv_base": 3736000.0,
+          "advance_rate": 65.0,
+          "lending_value": 2428400.0,
+          "beta": -0.04377641371507663
+        },
+        {
+          "instrument_id": "SYN-EQ-0020",
+          "name": "Asia ex-Japan Equity Fund",
+          "mv_base": 2482500.0,
+          "advance_rate": 60.0,
+          "lending_value": 1489500.0,
+          "beta": -0.0968524207056142
+        },
+        {
+          "instrument_id": "SYN-SP-0502",
+          "name": "Equity Linked Note ref. Helios Cloud Systems, 11.00% p.a., 6M",
+          "mv_base": 2620000.0,
+          "advance_rate": 30.0,
+          "lending_value": 786000.0,
+          "beta": -0.08718110691882172
+        },
+        {
+          "instrument_id": "SYN-FI-0208",
+          "name": "Short Duration USD Bond Fund",
+          "mv_base": 2034000.0,
+          "advance_rate": 85.0,
+          "lending_value": 1728900.0,
+          "beta": -0.017203211239176598
+        },
+        {
+          "instrument_id": "SYN-AL-0301",
+          "name": "Meridian Private Equity Fund VII",
+          "mv_base": 2412800.0,
+          "advance_rate": 0.0,
+          "lending_value": 0.0,
+          "beta": -0.0023380133005907154
+        },
+        {
+          "instrument_id": "SYN-CA-0601",
+          "name": "USD Call Deposit",
+          "mv_base": 1900000.0,
+          "advance_rate": 90.0,
+          "lending_value": 1710000.0,
+          "beta": 0.0
+        }
+      ],
+      "history": [
+        {
+          "date": "2025-12-31",
+          "drawn": 4200000.0,
+          "collateral_mv": 31165393.58,
+          "lending_value": 18075526.15,
+          "ltv": 23.24
+        },
+        {
+          "date": "2026-02-27",
+          "drawn": 4200000.0,
+          "collateral_mv": 33040984.62,
+          "lending_value": 19137420.77,
+          "ltv": 21.95
+        },
+        {
+          "date": "2026-03-31",
+          "drawn": 4200000.0,
+          "collateral_mv": 31881276.78,
+          "lending_value": 18478756.07,
+          "ltv": 22.73
+        },
+        {
+          "date": "2026-06-30",
+          "drawn": 4200000.0,
+          "collateral_mv": 35912924.3,
+          "lending_value": 20064124.58,
+          "ltv": 20.93
+        },
+        {
+          "date": "2026-08-26",
+          "drawn": 4200000.0,
+          "collateral_mv": 36952084.12,
+          "lending_value": 20599640.47,
+          "ltv": 20.39
+        }
+      ]
+    },
+    "CF-0004": {
+      "facility_id": "CF-0004",
+      "client_id": "CL-0011",
+      "portfolio": "PF-0013",
+      "ccy": "SGD",
+      "drawn": 6000000.0,
+      "lending_value": 18582564.4,
+      "ltv_now": 32.29,
+      "trigger_ltv": 80.0,
+      "lending_value_at_trigger": 7500000.0,
+      "C": -1248879.0633811078,
+      "brent_trigger": 1002.2119420791599,
+      "collateral_move_required": -0.5963958558916658,
+      "legs": [
+        {
+          "instrument_id": "SYN-AL-0306",
+          "name": "Direct Property - Sentosa Cove Residence",
+          "mv_base": 8750000.0,
+          "advance_rate": 0.0,
+          "lending_value": 0.0,
+          "beta": -0.006637766876767487
+        },
+        {
+          "instrument_id": "SYN-AL-0305",
+          "name": "Asia Real Estate Opportunity Fund III",
+          "mv_base": 9756000.0,
+          "advance_rate": 0.0,
+          "lending_value": 0.0,
+          "beta": -0.062174873367439626
+        },
+        {
+          "instrument_id": "SYN-EQ-0024",
+          "name": "Singapore REIT Income Fund",
+          "mv_base": 6061000.0,
+          "advance_rate": 55.0,
+          "lending_value": 3333550.0,
+          "beta": -0.09280938622043797
+        },
+        {
+          "instrument_id": "SYN-FI-0211",
+          "name": "Singapore Government Securities 2.75% due 2036",
+          "mv_base": 6426000.0,
+          "advance_rate": 90.0,
+          "lending_value": 5783400.0,
+          "beta": -0.08453577421921746
+        },
+        {
+          "instrument_id": "SYN-FI-0203",
+          "name": "Global Investment Grade Corporate Bond Fund",
+          "mv_base": 5261984.0,
+          "advance_rate": 75.0,
+          "lending_value": 3946488.0,
+          "beta": -0.07000131589240612
+        },
+        {
+          "instrument_id": "SYN-EQ-0023",
+          "name": "ASEAN Equity Fund",
+          "mv_base": 2307000.0,
+          "advance_rate": 60.0,
+          "lending_value": 1384200.0,
+          "beta": -0.08624514279280976
+        },
+        {
+          "instrument_id": "SYN-EQ-0001",
+          "name": "Global Developed Equity Index Fund",
+          "mv_base": 1930656.0,
+          "advance_rate": 65.0,
+          "lending_value": 1254926.4,
+          "beta": -0.04378763369640418
+        },
+        {
+          "instrument_id": "SYN-AL-0302",
+          "name": "Orchard Private Credit Fund II",
+          "mv_base": 4080336.0,
+          "advance_rate": 0.0,
+          "lending_value": 0.0,
+          "beta": 0.020825273829412426
+        },
+        {
+          "instrument_id": "SYN-CA-0602",
+          "name": "SGD Fixed Deposit 3M",
+          "mv_base": 3200000.0,
+          "advance_rate": 90.0,
+          "lending_value": 2880000.0,
+          "beta": 0.0
+        }
+      ],
+      "history": [
+        {
+          "date": "2025-12-31",
+          "drawn": 6000000.0,
+          "collateral_mv": 48873096.0,
+          "lending_value": 18998075.4,
+          "ltv": 31.58
+        },
+        {
+          "date": "2026-02-27",
+          "drawn": 6000000.0,
+          "collateral_mv": 49334606.0,
+          "lending_value": 19246188.9,
+          "ltv": 31.18
+        },
+        {
+          "date": "2026-03-31",
+          "drawn": 6000000.0,
+          "collateral_mv": 48433360.0,
+          "lending_value": 18712979.5,
+          "ltv": 32.06
+        },
+        {
+          "date": "2026-06-30",
+          "drawn": 6000000.0,
+          "collateral_mv": 48335709.0,
+          "lending_value": 18655406.1,
+          "ltv": 32.16
+        },
+        {
+          "date": "2026-08-26",
+          "drawn": 6000000.0,
+          "collateral_mv": 47772976.0,
+          "lending_value": 18582564.4,
+          "ltv": 32.29
+        }
+      ]
+    },
+    "CF-0005": {
+      "facility_id": "CF-0005",
+      "client_id": "CL-0001",
+      "portfolio": "PF-0002",
+      "ccy": "SGD",
+      "drawn": 8000000.0,
+      "lending_value": 13525392.14,
+      "ltv_now": 59.15,
+      "trigger_ltv": 70.0,
+      "lending_value_at_trigger": 11428571.42857143,
+      "C": 9397181.404553335,
+      "brent_trigger": 78.85200662329706,
+      "collateral_move_required": -0.1550284597832423,
+      "legs": [
+        {
+          "instrument_id": "SYN-ST-0101",
+          "name": "Bara Nusantara Energy Tbk",
+          "mv_base": 26077344.28,
+          "advance_rate": 50.0,
+          "lending_value": 13038672.14,
+          "beta": 0.7207161360952309
+        },
+        {
+          "instrument_id": "SYN-CA-0601",
+          "name": "USD Call Deposit",
+          "mv_base": 540800.0,
+          "advance_rate": 90.0,
+          "lending_value": 486720.0,
+          "beta": 0.0
+        }
+      ],
+      "history": [
+        {
+          "date": "2025-12-31",
+          "drawn": 8000000.0,
+          "collateral_mv": 19969200.0,
+          "lending_value": 10191000.0,
+          "ltv": 78.5
+        },
+        {
+          "date": "2026-02-27",
+          "drawn": 8000000.0,
+          "collateral_mv": 20723560.98,
+          "lending_value": 10571380.49,
+          "ltv": 75.68
+        },
+        {
+          "date": "2026-03-31",
+          "drawn": 8000000.0,
+          "collateral_mv": 26755132.74,
+          "lending_value": 13591166.37,
+          "ltv": 58.86
+        },
+        {
+          "date": "2026-06-30",
+          "drawn": 8000000.0,
+          "collateral_mv": 25301639.53,
+          "lending_value": 12866019.77,
+          "ltv": 62.18
+        },
+        {
+          "date": "2026-08-26",
+          "drawn": 8000000.0,
+          "collateral_mv": 26618144.28,
+          "lending_value": 13525392.14,
+          "ltv": 59.15
+        }
+      ]
+    }
+  },
+  "betas": {
+    "SYN-ST-0101": {
+      "beta": 0.7207161360952309,
+      "r2": 0.999100068988869
+    },
+    "SYN-ST-0104": {
+      "beta": 0.5499619240518954,
+      "r2": 0.8980731246027011
+    },
+    "SYN-EQ-0008": {
+      "beta": 0.5652370034808187,
+      "r2": 0.9930909342437183
+    },
+    "SYN-EQ-0025": {
+      "beta": 0.4015380608218946,
+      "r2": 0.9170038925919705
+    },
+    "SYN-SP-0505": {
+      "beta": 0.1725816035444826,
+      "r2": 0.9536214610708565
+    },
+    "SYN-ST-0103": {
+      "beta": -0.09262343376943044,
+      "r2": -0.4754203510722277
+    },
+    "SYN-SP-0502": {
+      "beta": -0.08718110691882172,
+      "r2": 0.24671040033538816
+    }
+  },
+  "market": {
+    "brent": {
+      "2025-12-31": 69.0,
+      "2026-02-27": 72.4,
+      "2026-03-31": 104.0,
+      "2026-06-30": 96.0,
+      "2026-08-26": 101.5
+    }
+  },
+  "scenario_brent_79": {
+    "brent": 79.0,
+    "clients": {
+      "CL-0001": {
+        "household_usd": 46571821.480000004,
+        "usd_delta": -3004373.2526576873,
+        "moves": [
+          {
+            "instrument_id": "SYN-ST-0101",
+            "name": "Bara Nusantara Energy Tbk",
+            "portfolio_id": "PF-0002",
+            "beta": 0.7207161360952309,
+            "pct": -15.976466071076542,
+            "usd_delta": -3081537.027710303
+          },
+          {
+            "instrument_id": "SYN-AL-0303",
+            "name": "Tanjong Global Macro Fund",
+            "portfolio_id": "PF-0001",
+            "beta": 0.1567577770510344,
+            "pct": -3.4749260922643086,
+            "usd_delta": -67177.27121565361
+          },
+          {
+            "instrument_id": "SYN-SP-0505",
+            "name": "Fixed Coupon Note ref. Basket C, 9.20% p.a., 12M",
+            "portfolio_id": "PF-0001",
+            "beta": 0.1725816035444826,
+            "pct": -3.8257005711831114,
+            "usd_delta": -63601.65950125777
+          },
+          {
+            "instrument_id": "SYN-CM-0402",
+            "name": "Gold Bullion ETF",
+            "portfolio_id": "PF-0001",
+            "beta": 0.14750018355128264,
+            "pct": -3.2697085023683337,
+            "usd_delta": -55859.70005446061
+          },
+          {
+            "instrument_id": "SYN-FI-0208",
+            "name": "Short Duration USD Bond Fund",
+            "portfolio_id": "PF-0001",
+            "beta": -0.017203211239176598,
+            "pct": 0.3813519732822398,
+            "usd_delta": 9695.873920700946
+          },
+          {
+            "instrument_id": "SYN-EQ-0003",
+            "name": "US Technology Leaders Fund",
+            "portfolio_id": "PF-0001",
+            "beta": -0.06162538273658481,
+            "pct": 1.3660799128799586,
+            "usd_delta": 32354.23665664894
+          },
+          {
+            "instrument_id": "SYN-FI-0204",
+            "name": "Asia Investment Grade Credit Fund",
+            "portfolio_id": "PF-0001",
+            "beta": -0.07170931803726754,
+            "pct": 1.5896154244714475,
+            "usd_delta": 67169.19976104103
+          },
+          {
+            "instrument_id": "SYN-EQ-0001",
+            "name": "Global Developed Equity Index Fund",
+            "portfolio_id": "PF-0001",
+            "beta": -0.04378763369640418,
+            "pct": 0.9706618307084668,
+            "usd_delta": 69305.25471258453
+          },
+          {
+            "instrument_id": "SYN-EQ-0020",
+            "name": "Asia ex-Japan Equity Fund",
+            "portfolio_id": "PF-0001",
+            "beta": -0.0968524207056142,
+            "pct": 2.1469748432279006,
+            "usd_delta": 85277.84077301221
+          }
+        ]
+      },
+      "CL-0019": {
+        "household_usd": 32214266.33,
+        "usd_delta": -1064495.2768163604,
+        "moves": [
+          {
+            "instrument_id": "SYN-ST-0104",
+            "name": "Pacific Orient Shipping Ltd",
+            "portfolio_id": "PF-0023",
+            "beta": 0.5499619240518954,
+            "pct": -12.19127417849029,
+            "usd_delta": -448158.10736517515
+          },
+          {
+            "instrument_id": "SYN-EQ-0008",
+            "name": "Global Energy Majors Equity Fund",
+            "portfolio_id": "PF-0023",
+            "beta": 0.5652370034808187,
+            "pct": -12.529884313614206,
+            "usd_delta": -360710.30962032574
+          },
+          {
+            "instrument_id": "SYN-EQ-0025",
+            "name": "Asia Pacific Shipping and Logistics Fund",
+            "portfolio_id": "PF-0023",
+            "beta": 0.4015380608218946,
+            "pct": -8.901090018219337,
+            "usd_delta": -254766.99850147383
+          },
+          {
+            "instrument_id": "SYN-SP-0505",
+            "name": "Fixed Coupon Note ref. Basket C, 9.20% p.a., 12M",
+            "portfolio_id": "PF-0023",
+            "beta": 0.1725816035444826,
+            "pct": -3.8257005711831114,
+            "usd_delta": -159004.14932699953
+          },
+          {
+            "instrument_id": "SYN-AL-0303",
+            "name": "Tanjong Global Macro Fund",
+            "portfolio_id": "PF-0023",
+            "beta": 0.1567577770510344,
+            "pct": -3.4749260922643086,
+            "usd_delta": -67177.27121565361
+          },
+          {
+            "instrument_id": "SYN-EQ-0002",
+            "name": "US Large Cap Core Fund",
+            "portfolio_id": "PF-0023",
+            "beta": -0.04377641371507663,
+            "pct": 0.9704131119105656,
+            "usd_delta": 29003.707088782983
+          },
+          {
+            "instrument_id": "SYN-EQ-0001",
+            "name": "Global Developed Equity Index Fund",
+            "portfolio_id": "PF-0023",
+            "beta": -0.04378763369640418,
+            "pct": 0.9706618307084668,
+            "usd_delta": 41583.152827550715
+          },
+          {
+            "instrument_id": "SYN-EQ-0020",
+            "name": "Asia ex-Japan Equity Fund",
+            "portfolio_id": "PF-0023",
+            "beta": -0.0968524207056142,
+            "pct": 2.1469748432279006,
+            "usd_delta": 42638.920386506106
+          },
+          {
+            "instrument_id": "SYN-FI-0203",
+            "name": "Global Investment Grade Corporate Bond Fund",
+            "portfolio_id": "PF-0023",
+            "beta": -0.07000131589240612,
+            "pct": 1.5517533079597412,
+            "usd_delta": 45295.67905934484
+          },
+          {
+            "instrument_id": "SYN-FI-0210",
+            "name": "Emerging Market Sovereign Bond Fund",
+            "portfolio_id": "PF-0023",
+            "beta": -0.14147543317443748,
+            "pct": 3.136154922586052,
+            "usd_delta": 66800.0998510829
+          }
+        ]
+      },
+      "CL-0002": {
+        "household_usd": 46699200.0,
+        "usd_delta": 234955.49024138832,
+        "moves": [
+          {
+            "instrument_id": "SYN-FI-0208",
+            "name": "Short Duration USD Bond Fund",
+            "portfolio_id": "PF-0003",
+            "beta": -0.017203211239176598,
+            "pct": 0.3813519732822398,
+            "usd_delta": 4654.019481936454
+          },
+          {
+            "instrument_id": "SYN-EQ-0001",
+            "name": "Global Developed Equity Index Fund",
+            "portfolio_id": "PF-0003",
+            "beta": -0.04378763369640418,
+            "pct": 0.9706618307084668,
+            "usd_delta": 13861.050942516906
+          },
+          {
+            "instrument_id": "SYN-SP-0502",
+            "name": "Equity Linked Note ref. Helios Cloud Systems, 11.00% p.a., 6M",
+            "portfolio_id": "PF-0003",
+            "beta": -0.08718110691882172,
+            "pct": 1.932586113964028,
+            "usd_delta": 30380.25371151452
+          },
+          {
+            "instrument_id": "SYN-EQ-0022",
+            "name": "India Equity Fund",
+            "portfolio_id": "PF-0003",
+            "beta": -0.09656560661936654,
+            "pct": 2.140616895503199,
+            "usd_delta": 36257.76897603318
+          },
+          {
+            "instrument_id": "SYN-ST-0103",
+            "name": "Helios Cloud Systems Inc",
+            "portfolio_id": "PF-0003",
+            "beta": -0.09262343376943044,
+            "pct": 2.053228827401167,
+            "usd_delta": 42493.623811894555
+          },
+          {
+            "instrument_id": "SYN-EQ-0003",
+            "name": "US Technology Leaders Fund",
+            "portfolio_id": "PF-0003",
+            "beta": -0.06162538273658481,
+            "pct": 1.3660799128799586,
+            "usd_delta": 48531.35498497341
+          },
+          {
+            "instrument_id": "SYN-ST-0102",
+            "name": "Meridian Semiconductor Corp",
+            "portfolio_id": "PF-0003",
+            "beta": -0.11822341043439173,
+            "pct": 2.620715994851048,
+            "usd_delta": 58777.4183325193
+          }
+        ]
+      }
+    },
+    "facilities": {
+      "CF-0001": {
+        "lending_value": 8944825.238983795,
+        "ltv": 72.66771374885411,
+        "trigger": 75.0,
+        "breached": false
+      },
+      "CF-0002": {
+        "lending_value": 86783166.84538703,
+        "ltv": 66.8332374910135,
+        "trigger": 70.0,
+        "breached": false
+      },
+      "CF-0003": {
+        "lending_value": 20914728.17314221,
+        "ltv": 20.081542371626224,
+        "trigger": 75.0,
+        "breached": false
+      },
+      "CF-0004": {
+        "lending_value": 18859409.512572166,
+        "ltv": 31.81435768707523,
+        "trigger": 80.0,
+        "breached": false
+      },
+      "CF-0005": {
+        "lending_value": 11442273.10943399,
+        "ltv": 69.91617769902831,
+        "trigger": 70.0,
+        "breached": false
+      }
+    }
+  },
+  "positions": [
+    {
+      "client_id": "CL-0001",
+      "portfolio_id": "PF-0001",
+      "instrument_id": "SYN-EQ-0001",
+      "name": "Global Developed Equity Index Fund",
+      "asset_class": "Equity",
+      "market_value_usd": 7140000.0,
+      "market_value_base": 9653280.0,
+      "weight_pct": 26.5587,
+      "liquidity_tier": "Daily",
+      "beta": -0.04378763369640418
+    },
+    {
+      "client_id": "CL-0001",
+      "portfolio_id": "PF-0001",
+      "instrument_id": "SYN-EQ-0020",
+      "name": "Asia ex-Japan Equity Fund",
+      "asset_class": "Equity",
+      "market_value_usd": 3972000.0,
+      "market_value_base": 5370144.0,
+      "weight_pct": 14.7747,
+      "liquidity_tier": "Daily",
+      "beta": -0.0968524207056142
+    },
+    {
+      "client_id": "CL-0001",
+      "portfolio_id": "PF-0001",
+      "instrument_id": "SYN-EQ-0003",
+      "name": "US Technology Leaders Fund",
+      "asset_class": "Equity",
+      "market_value_usd": 2368400.0,
+      "market_value_base": 3202076.8,
+      "weight_pct": 8.8098,
+      "liquidity_tier": "Daily",
+      "beta": -0.06162538273658481
+    },
+    {
+      "client_id": "CL-0001",
+      "portfolio_id": "PF-0001",
+      "instrument_id": "SYN-FI-0204",
+      "name": "Asia Investment Grade Credit Fund",
+      "asset_class": "Fixed Income",
+      "market_value_usd": 4225500.0,
+      "market_value_base": 5712876.0,
+      "weight_pct": 15.7176,
+      "liquidity_tier": "Daily",
+      "beta": -0.07170931803726754
+    },
+    {
+      "client_id": "CL-0001",
+      "portfolio_id": "PF-0001",
+      "instrument_id": "SYN-FI-0208",
+      "name": "Short Duration USD Bond Fund",
+      "asset_class": "Fixed Income",
+      "market_value_usd": 2542500.0,
+      "market_value_base": 3437460.0,
+      "weight_pct": 9.4574,
+      "liquidity_tier": "Daily",
+      "beta": -0.017203211239176598
+    },
+    {
+      "client_id": "CL-0001",
+      "portfolio_id": "PF-0001",
+      "instrument_id": "SYN-AL-0303",
+      "name": "Tanjong Global Macro Fund",
+      "asset_class": "Alternatives",
+      "market_value_usd": 1933200.0,
+      "market_value_base": 2613686.4,
+      "weight_pct": 7.1909,
+      "liquidity_tier": "Monthly",
+      "beta": 0.1567577770510344
+    },
+    {
+      "client_id": "CL-0001",
+      "portfolio_id": "PF-0001",
+      "instrument_id": "SYN-CM-0402",
+      "name": "Gold Bullion ETF",
+      "asset_class": "Commodities",
+      "market_value_usd": 1708400.0,
+      "market_value_base": 2309756.8,
+      "weight_pct": 6.3547,
+      "liquidity_tier": "Daily",
+      "beta": 0.14750018355128264
+    },
+    {
+      "client_id": "CL-0001",
+      "portfolio_id": "PF-0001",
+      "instrument_id": "SYN-SP-0505",
+      "name": "Fixed Coupon Note ref. Basket C, 9.20% p.a., 12M",
+      "asset_class": "Structured Products",
+      "market_value_usd": 1662483.99,
+      "market_value_base": 2247678.36,
+      "weight_pct": 6.184,
+      "liquidity_tier": "Illiquid",
+      "beta": 0.1725816035444826
+    },
+    {
+      "client_id": "CL-0001",
+      "portfolio_id": "PF-0001",
+      "instrument_id": "SYN-CA-0602",
+      "name": "SGD Fixed Deposit 3M",
+      "asset_class": "Cash and Equivalents",
+      "market_value_usd": 1331360.95,
+      "market_value_base": 1800000.0,
+      "weight_pct": 4.9523,
+      "liquidity_tier": "Monthly",
+      "beta": 0.0
+    },
+    {
+      "client_id": "CL-0001",
+      "portfolio_id": "PF-0002",
+      "instrument_id": "SYN-ST-0101",
+      "name": "Bara Nusantara Energy Tbk",
+      "asset_class": "Equity",
+      "market_value_usd": 19287976.54,
+      "market_value_base": 26077344.28,
+      "weight_pct": 97.9683,
+      "liquidity_tier": "Daily",
+      "beta": 0.7207161360952309
+    },
+    {
+      "client_id": "CL-0001",
+      "portfolio_id": "PF-0002",
+      "instrument_id": "SYN-CA-0601",
+      "name": "USD Call Deposit",
+      "asset_class": "Cash and Equivalents",
+      "market_value_usd": 400000.0,
+      "market_value_base": 540800.0,
+      "weight_pct": 2.0317,
+      "liquidity_tier": "Daily",
+      "beta": 0.0
+    },
+    {
+      "client_id": "CL-0019",
+      "portfolio_id": "PF-0023",
+      "instrument_id": "SYN-EQ-0025",
+      "name": "Asia Pacific Shipping and Logistics Fund",
+      "asset_class": "Equity",
+      "market_value_usd": 2862200.0,
+      "market_value_base": 2862200.0,
+      "weight_pct": 8.8849,
+      "liquidity_tier": "Daily",
+      "beta": 0.4015380608218946
+    },
+    {
+      "client_id": "CL-0019",
+      "portfolio_id": "PF-0023",
+      "instrument_id": "SYN-ST-0104",
+      "name": "Pacific Orient Shipping Ltd",
+      "asset_class": "Equity",
+      "market_value_usd": 3676056.34,
+      "market_value_base": 3676056.34,
+      "weight_pct": 11.4113,
+      "liquidity_tier": "Daily",
+      "beta": 0.5499619240518954
+    },
+    {
+      "client_id": "CL-0019",
+      "portfolio_id": "PF-0023",
+      "instrument_id": "SYN-EQ-0008",
+      "name": "Global Energy Majors Equity Fund",
+      "asset_class": "Equity",
+      "market_value_usd": 2878800.0,
+      "market_value_base": 2878800.0,
+      "weight_pct": 8.9364,
+      "liquidity_tier": "Daily",
+      "beta": 0.5652370034808187
+    },
+    {
+      "client_id": "CL-0019",
+      "portfolio_id": "PF-0023",
+      "instrument_id": "SYN-SP-0505",
+      "name": "Fixed Coupon Note ref. Basket C, 9.20% p.a., 12M",
+      "asset_class": "Structured Products",
+      "market_value_usd": 4156209.99,
+      "market_value_base": 4156209.99,
+      "weight_pct": 12.9018,
+      "liquidity_tier": "Illiquid",
+      "beta": 0.1725816035444826
+    },
+    {
+      "client_id": "CL-0019",
+      "portfolio_id": "PF-0023",
+      "instrument_id": "SYN-EQ-0001",
+      "name": "Global Developed Equity Index Fund",
+      "asset_class": "Equity",
+      "market_value_usd": 4284000.0,
+      "market_value_base": 4284000.0,
+      "weight_pct": 13.2985,
+      "liquidity_tier": "Daily",
+      "beta": -0.04378763369640418
+    },
+    {
+      "client_id": "CL-0019",
+      "portfolio_id": "PF-0023",
+      "instrument_id": "SYN-EQ-0002",
+      "name": "US Large Cap Core Fund",
+      "asset_class": "Equity",
+      "market_value_usd": 2988800.0,
+      "market_value_base": 2988800.0,
+      "weight_pct": 9.2779,
+      "liquidity_tier": "Daily",
+      "beta": -0.04377641371507663
+    },
+    {
+      "client_id": "CL-0019",
+      "portfolio_id": "PF-0023",
+      "instrument_id": "SYN-EQ-0020",
+      "name": "Asia ex-Japan Equity Fund",
+      "asset_class": "Equity",
+      "market_value_usd": 1986000.0,
+      "market_value_base": 1986000.0,
+      "weight_pct": 6.165,
+      "liquidity_tier": "Daily",
+      "beta": -0.0968524207056142
+    },
+    {
+      "client_id": "CL-0019",
+      "portfolio_id": "PF-0023",
+      "instrument_id": "SYN-FI-0203",
+      "name": "Global Investment Grade Corporate Bond Fund",
+      "asset_class": "Fixed Income",
+      "market_value_usd": 2919000.0,
+      "market_value_base": 2919000.0,
+      "weight_pct": 9.0612,
+      "liquidity_tier": "Daily",
+      "beta": -0.07000131589240612
+    },
+    {
+      "client_id": "CL-0019",
+      "portfolio_id": "PF-0023",
+      "instrument_id": "SYN-FI-0210",
+      "name": "Emerging Market Sovereign Bond Fund",
+      "asset_class": "Fixed Income",
+      "market_value_usd": 2130000.0,
+      "market_value_base": 2130000.0,
+      "weight_pct": 6.612,
+      "liquidity_tier": "Daily",
+      "beta": -0.14147543317443748
+    },
+    {
+      "client_id": "CL-0019",
+      "portfolio_id": "PF-0023",
+      "instrument_id": "SYN-AL-0303",
+      "name": "Tanjong Global Macro Fund",
+      "asset_class": "Alternatives",
+      "market_value_usd": 1933200.0,
+      "market_value_base": 1933200.0,
+      "weight_pct": 6.0011,
+      "liquidity_tier": "Monthly",
+      "beta": 0.1567577770510344
+    },
+    {
+      "client_id": "CL-0019",
+      "portfolio_id": "PF-0023",
+      "instrument_id": "SYN-CA-0601",
+      "name": "USD Call Deposit",
+      "asset_class": "Cash and Equivalents",
+      "market_value_usd": 2400000.0,
+      "market_value_base": 2400000.0,
+      "weight_pct": 7.4501,
+      "liquidity_tier": "Daily",
+      "beta": 0.0
+    },
+    {
+      "client_id": "CL-0002",
+      "portfolio_id": "PF-0003",
+      "instrument_id": "SYN-EQ-0003",
+      "name": "US Technology Leaders Fund",
+      "asset_class": "Equity",
+      "market_value_usd": 3552600.0,
+      "market_value_base": 3552600.0,
+      "weight_pct": 24.0378,
+      "liquidity_tier": "Daily",
+      "beta": -0.06162538273658481
+    },
+    {
+      "client_id": "CL-0002",
+      "portfolio_id": "PF-0003",
+      "instrument_id": "SYN-ST-0102",
+      "name": "Meridian Semiconductor Corp",
+      "asset_class": "Equity",
+      "market_value_usd": 2242800.0,
+      "market_value_base": 2242800.0,
+      "weight_pct": 15.1754,
+      "liquidity_tier": "Daily",
+      "beta": -0.11822341043439173
+    },
+    {
+      "client_id": "CL-0002",
+      "portfolio_id": "PF-0003",
+      "instrument_id": "SYN-ST-0103",
+      "name": "Helios Cloud Systems Inc",
+      "asset_class": "Equity",
+      "market_value_usd": 2069600.0,
+      "market_value_base": 2069600.0,
+      "weight_pct": 14.0035,
+      "liquidity_tier": "Daily",
+      "beta": -0.09262343376943044
+    },
+    {
+      "client_id": "CL-0002",
+      "portfolio_id": "PF-0003",
+      "instrument_id": "SYN-EQ-0022",
+      "name": "India Equity Fund",
+      "asset_class": "Equity",
+      "market_value_usd": 1693800.0,
+      "market_value_base": 1693800.0,
+      "weight_pct": 11.4607,
+      "liquidity_tier": "Daily",
+      "beta": -0.09656560661936654
+    },
+    {
+      "client_id": "CL-0002",
+      "portfolio_id": "PF-0003",
+      "instrument_id": "SYN-EQ-0001",
+      "name": "Global Developed Equity Index Fund",
+      "asset_class": "Equity",
+      "market_value_usd": 1428000.0,
+      "market_value_base": 1428000.0,
+      "weight_pct": 9.6622,
+      "liquidity_tier": "Daily",
+      "beta": -0.04378763369640418
+    },
+    {
+      "client_id": "CL-0002",
+      "portfolio_id": "PF-0003",
+      "instrument_id": "SYN-FI-0208",
+      "name": "Short Duration USD Bond Fund",
+      "asset_class": "Fixed Income",
+      "market_value_usd": 1220400.0,
+      "market_value_base": 1220400.0,
+      "weight_pct": 8.2576,
+      "liquidity_tier": "Daily",
+      "beta": -0.017203211239176598
+    },
+    {
+      "client_id": "CL-0002",
+      "portfolio_id": "PF-0003",
+      "instrument_id": "SYN-SP-0502",
+      "name": "Equity Linked Note ref. Helios Cloud Systems, 11.00% p.a., 6M",
+      "asset_class": "Structured Products",
+      "market_value_usd": 1572000.0,
+      "market_value_base": 1572000.0,
+      "weight_pct": 10.6366,
+      "liquidity_tier": "Illiquid",
+      "beta": -0.08718110691882172
+    },
+    {
+      "client_id": "CL-0002",
+      "portfolio_id": "PF-0003",
+      "instrument_id": "SYN-CA-0601",
+      "name": "USD Call Deposit",
+      "asset_class": "Cash and Equivalents",
+      "market_value_usd": 1000000.0,
+      "market_value_base": 1000000.0,
+      "weight_pct": 6.7663,
+      "liquidity_tier": "Daily",
+      "beta": 0.0
+    },
+    {
+      "client_id": "CL-0002",
+      "portfolio_id": "PF-0004",
+      "instrument_id": "SYN-AL-0308",
+      "name": "Unlisted Holding - Aranya Technologies Pte Ltd",
+      "asset_class": "Alternatives",
+      "market_value_usd": 31920000.0,
+      "market_value_base": 31920000.0,
+      "weight_pct": 100.0,
+      "liquidity_tier": "Illiquid",
+      "beta": 0.0
+    }
+  ]
+}
